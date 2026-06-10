@@ -52,11 +52,7 @@ class MessageSent implements ShouldBroadcastNow
     public function broadcastWith(): array
     {
         return [
-            'id' => $this->message->id,
-            'session_id' => $this->message->session_id,
-            'message' => $this->message->message,
-            'sender_type' => $this->message->sender_type,
-            'time' => $this->message->created_at->format('H:i'),
+            'message' => $this->message->toArray()
         ];
     }
 }

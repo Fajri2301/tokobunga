@@ -89,7 +89,7 @@
                             </div>
                             <div class="w-full md:w-1/2 flex items-center justify-center relative">
                                 <div class="aspect-[5/4] w-full max-w-[750px] flex items-center justify-center relative md:translate-y-4 lg:translate-y-8 scale-110 md:scale-125">
-                                    <img src="{{ asset('storage/' . $banner->image) }}" 
+                                    <img src="{{ str_starts_with($banner->image, 'http') ? $banner->image : asset('storage/' . $banner->image) }}" 
                                          class="h-full w-full object-contain drop-shadow-[0_20px_60px_rgba(0,0,0,0.1)]" 
                                          alt="{{ $banner->title }}">
                                 </div>
@@ -119,7 +119,7 @@
                 <img src="{{ asset('assets/kembangbawahkanan.png') }}" alt="Decoration" class="absolute -bottom-20 right-0 md:-bottom-28 md:right-0 w-40 md:w-72 h-auto z-20 pointer-events-none drop-shadow-lg">
                 <div class="filter drop-shadow-[0_20px_50px_rgba(0,0,0,0.2)] relative z-10">
                     @if($adBanner)
-                        <img src="{{ asset('storage/' . $adBanner->image) }}" class="w-full h-auto object-cover ad-banner-custom-cut" alt="Promo">
+                        <img src="{{ str_starts_with($adBanner->image, 'http') ? $adBanner->image : asset('storage/' . $adBanner->image) }}" class="w-full h-auto object-cover ad-banner-custom-cut" alt="Promo">
                     @else
                         <div class="relative w-full h-[300px] bg-slate-100 flex items-center justify-center text-slate-400 font-bold italic border-2 border-dashed border-slate-200 ad-banner-custom-cut">Silakan unggah Banner Iklan.</div>
                     @endif
@@ -139,7 +139,7 @@
                     <div class="relative mb-2">
                         <div class="w-16 h-16 md:w-20 md:h-20 rounded-full p-1 border-2 border-[#545454] group-hover:border-[#87ceeb] transition-all duration-300">
                             <div class="w-full h-full rounded-full bg-slate-50 overflow-hidden flex items-center justify-center p-2">
-                                <img src="{{ asset('storage/' . $category->image) }}" class="w-full h-full object-contain group-hover:scale-110 transition-all" alt="{{ $category->name }}">
+                                <img src="{{ str_starts_with($category->image, 'http') ? $category->image : asset('storage/' . $category->image) }}" class="w-full h-full object-contain group-hover:scale-110 transition-all" alt="{{ $category->name }}">
                             </div>
                         </div>
                         <div class="absolute -top-1 -right-1 bg-[#87ceeb] text-white text-[8px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white shadow-sm z-10">{{ $category->products_count ?? $category->products()->count() }}</div>
@@ -174,7 +174,7 @@
                         @foreach($homeCat->products->take(3) as $pIndex => $product)
                         <div class="w-full rounded-[20px] md:rounded-[24px] bg-[#87ceeb] p-0 shadow-md flex flex-col overflow-hidden {{ $pIndex == 2 ? 'hidden md:flex' : '' }}">
                             <div class="h-32 md:h-48 w-full bg-white">
-                                <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-contain p-2" />
+                                <img src="{{ str_starts_with($product->image, 'http') ? $product->image : asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-contain p-2" />
                             </div>
                             <div class="relative flex-1 bg-white p-3 md:p-4 flex flex-col justify-between shadow-sm">
                                 <h3 class="text-[11px] md:text-[14px] font-bold leading-tight text-[#87ceeb] pr-4 uppercase tracking-tighter line-clamp-2">{{ $product->name }}</h3>
@@ -206,7 +206,7 @@
                         <div class="swiper-wrapper">
                             @forelse($homeCat->products as $product)
                             <div class="swiper-slide relative">
-                                <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="h-full w-full object-cover" />
+                                <img src="{{ str_starts_with($product->image, 'http') ? $product->image : asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="h-full w-full object-cover" />
                                 <div class="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-[#87ceeb] via-[#87ceeb]/80 to-transparent flex items-end p-8">
                                     <h3 class="text-white text-2xl md:text-3xl font-bold leading-snug drop-shadow-md uppercase tracking-tighter">
                                         {{ $product->name }}

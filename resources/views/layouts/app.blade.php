@@ -326,10 +326,21 @@
             const time = msg.created_at ? new Date(msg.created_at) : new Date();
             const timeStr = time.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
+            // Check for image in metadata
+            let imageHtml = '';
+            if (msg.metadata && msg.metadata.image_url) {
+                imageHtml = `
+                    <a href="${msg.metadata.image_url}" target="_blank">
+                        <img src="${msg.metadata.image_url}" alt="Product Image" class="mt-2 rounded-lg max-w-full h-auto" />
+                    </a>
+                `;
+            }
+
             const html = `
                 <div class="flex ${isMe ? 'justify-end' : 'justify-start'} animate-fade-in mb-4">
                     <div class="${isMe ? 'bg-[#545454] text-white rounded-tr-none' : 'bg-white text-slate-700 rounded-tl-none border border-slate-100'} p-3 rounded-2xl text-xs max-w-[85%] shadow-sm">
                         ${msg.message}
+                        ${imageHtml}
                         <p class="text-[9px] ${isMe ? 'text-white/50' : 'text-slate-400'} mt-1 text-right">${timeStr}</p>
                     </div>
                 </div>
@@ -355,6 +366,7 @@
             input.value = '';
 
             try {
+                // We don't need to handle the response here because the broadcast will do it.
                 await fetch('/chat/send', {
                     method: 'POST',
                     headers: {
@@ -372,13 +384,10 @@
             if (window.Echo) {
                 const sessionId = '{{ session()->getId() }}';
                 window.Echo.channel('chat.' + sessionId)
-                    .listen('.message.sent', (e) => {
-                        if(e.sender_type !== 'customer') {
-                            appendMessage({
-                                sender_type: e.sender_type,
-                                message: e.message,
-                                created_at: new Date()
-                            });
+                    .listen('.message.sent', (event) => {
+                        // The full message object is now in event.message
+                        if(event.message.sender_type !== 'customer') {
+                            appendMessage(event.message);
                         }
                     });
             }

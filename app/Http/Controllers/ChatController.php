@@ -80,46 +80,76 @@ class ChatController extends Controller
             'sender_type' => 'customer',
             'message' => $request->message
         ]);
+        try {
+            broadcast(new MessageSent($message))->toOthers();
+        } catch (\Throwable $e) {
+            Log::error('Broadcast failed: ' . $e->getMessage());
+        }
 
-        // 2. Broadcast Customer Message
-        broadcast(new MessageSent($message))->toOthers();
-
-        // 3. Prepare Context & History for AI
+        // 2. Prepare Context & History for AI
         $history = Message::where('session_id', $sessionId)
             ->where('id', '<', $message->id)
             ->orderBy('created_at', 'desc')
             ->limit(10)
             ->get()
             ->reverse()
-            ->map(fn($m) => [
-                'role' => $m->sender_type,
-                'content' => $m->message
-            ])->toArray();
+            ->map(fn($m) => ['role' => $m->sender_type, 'content' => $m->message])
+            ->toArray();
 
         $products = Product::limit(15)->get(['name', 'price']);
         $settings = \App\Models\Setting::first();
-        
         $context = [
             'products' => $products,
             'store_info' => $settings ? [
-                'nama_toko' => $settings->site_name,
-                'alamat' => $settings->address,
-                'whatsapp' => $settings->whatsapp_number,
-                'email' => $settings->email,
+                'nama_toko' => $settings->site_name, 'alamat' => $settings->address,
+                'whatsapp' => $settings->whatsapp_number, 'email' => $settings->email,
             ] : []
         ];
 
-        // 4. Process AI Bot Response
-        $botReply = $this->aiService->getResponse($message->message, $context, $history);
+        // 3. Get AI Response (can be string or array)
+        $aiResponse = $this->aiService->getResponse($message->message, $context, $history);
 
-        if ($botReply) {
+        // 4. Process AI Response
+        if ($aiResponse) {
+            $botMessage = "Maaf, saya tidak mengerti."; // Default text
+            $metadata = null;
+
+            if (is_array($aiResponse) && isset($aiResponse['action'])) {
+                // Handle JSON command
+                if ($aiResponse['action'] === 'show_image' && isset($aiResponse['product_name'])) {
+                    $productName = $aiResponse['product_name'];
+                    $product = Product::where('name', 'like', '%' . $productName . '%')->first();
+
+                    if ($product) {
+                        $botMessage = "Tentu, ini dia gambar untuk " . $product->name . ":";
+                        
+                        // Check if image is an absolute URL or a local path
+                        $imageUrl = str_starts_with($product->image, 'http')
+                            ? $product->image
+                            : \Illuminate\Support\Facades\Storage::url($product->image);
+                        
+                        $metadata = ['image_url' => $imageUrl];
+                    } else {
+                        $botMessage = "Maaf, saya tidak dapat menemukan produk dengan nama '" . $productName . "'.";
+                    }
+                }
+            } elseif (is_string($aiResponse)) {
+                // Handle simple text response
+                $botMessage = $aiResponse;
+            }
+
             $botMsg = Message::create([
                 'session_id' => $sessionId,
                 'sender_type' => 'bot',
-                'message' => $botReply
+                'message' => $botMessage,
+                'metadata' => $metadata,
             ]);
             
-            broadcast(new MessageSent($botMsg));
+            try {
+                broadcast(new MessageSent($botMsg));
+            } catch (\Throwable $e) {
+                Log::error('Broadcast failed: ' . $e->getMessage());
+            }
         }
 
         return response()->json(['status' => 'success']);
@@ -141,7 +171,11 @@ class ChatController extends Controller
             'message' => $request->message
         ]);
 
-        broadcast(new MessageSent($message));
+        try {
+            broadcast(new MessageSent($message));
+        } catch (\Throwable $e) {
+            Log::error('Broadcast failed: ' . $e->getMessage());
+        }
 
         return response()->json(['status' => 'success']);
     }

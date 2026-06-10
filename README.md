@@ -14,7 +14,7 @@
 
 -   **🛍️ Katalog Produk Dinamis:** Manajemen produk dan kategori yang mudah melalui dashboard admin. Produk dapat ditandai sebagai "unggulan" untuk ditampilkan di halaman utama.
 -   **🤖 Flora Bot (Asisten AI):** 
-    -   **Integrasi Google Gemini:** Menggunakan model `gemini-1.5-flash` untuk respons yang cepat dan kontekstual.
+    -   **Integrasi Google Gemini:** Menggunakan model `gemini-2.0-flash` untuk respons yang cepat dan kontekstual.
     -   **Rekomendasi Cerdas:** Memberikan saran produk berdasarkan input bahasa natural dari pengguna (misal: "bunga untuk wisuda di bawah 300 ribu").
     -   **Penanganan Error Cerdas:** Memiliki sistem *fallback* yang ramah jika kuota API habis (HTTP 429) atau terjadi error, memastikan UX tetap baik.
 -   **🛒 Sistem Keranjang Belanja:** Alur belanja yang *seamless* dari penambahan produk hingga checkout.
@@ -103,7 +103,7 @@ Proyek ini mengadopsi arsitektur **Monolithic** dengan pola **MVC (Model-View-Co
         DB_PASSWORD=
 
         GEMINI_API_KEY=your_google_ai_studio_key
-        GEMINI_MODEL=gemini-1.5-flash
+        GEMINI_MODEL=gemini-2.0-flash
         ```
 
 4.  **Migrasi dan Seeding Database**

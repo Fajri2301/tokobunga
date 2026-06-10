@@ -13,6 +13,12 @@ class Message extends Model
         'session_id',
         'sender_type',
         'message',
+        'metadata',
         'is_read'
+    ];
+
+    protected $casts = [
+        'is_read' => 'boolean',
+        'metadata' => 'array',
     ];
 }

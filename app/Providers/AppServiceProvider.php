@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
-use App\Models\Setting;
+use App\Services\OpenRouterService;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -14,7 +14,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(\App\Contracts\SettingRepositoryInterface::class, \App\Repositories\SettingRepository::class);
-        $this->app->singleton(\App\Contracts\AIChatServiceInterface::class, \App\Services\GeminiService::class);
+        $this->app->singleton(\App\Contracts\AIChatServiceInterface::class, OpenRouterService::class);
 
         $this->app->singleton('settings', function () {
             return app(\App\Contracts\SettingRepositoryInterface::class)->getGlobalSettings();
@@ -31,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
         }
 
         // Optimization: Use selective view names instead of '*'
-        \Illuminate\Support\Facades\View::composer(['layouts.*', 'pages.*', 'catalog.*', 'home', 'admin.*'], function ($view) {
+        \Illuminate\Support\Facades\View::composer(['layouts.*', 'pages.*', 'catalog.*', 'home', 'admin.*', 'errors.*'], function ($view) {
             $view->with('global_setting', app('settings'));
             
             $categories = \Illuminate\Support\Facades\Cache::remember('categories_global', 3600, function() {

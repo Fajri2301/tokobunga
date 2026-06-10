@@ -12,5 +12,5 @@ interface AIChatServiceInterface
      * @param array $history
      * @return string|null
      */
-    public function getResponse(string $message, array $contextData = [], array $history = []): ?string;
+    public function getResponse(string $message, array $contextData = [], array $history = []): string|array|null;
 }

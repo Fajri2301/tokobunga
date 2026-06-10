@@ -11,7 +11,7 @@ import 'swiper/css/pagination';
 document.addEventListener('DOMContentLoaded', () => {
     const heroSwiper = new Swiper('.hero-swiper', {
         modules: [Navigation, Pagination, Autoplay],
-        loop: true,
+        loop: false,
         spaceBetween: 100,
         autoplay: {
             delay: 5000,
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const bentoSwiper = new Swiper('.bento-swiper', {
         modules: [Pagination, Autoplay],
-        loop: true,
+        loop: false,
         autoplay: {
             delay: 4000,
         },
