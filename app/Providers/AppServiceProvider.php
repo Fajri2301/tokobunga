@@ -26,6 +26,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        if ($this->app->environment('production')) {
+            \Illuminate\Support\Facades\URL::forceScheme('https');
+        }
+
         // Optimization: Use selective view names instead of '*'
         \Illuminate\Support\Facades\View::composer(['layouts.*', 'pages.*', 'catalog.*', 'home', 'admin.*'], function ($view) {
             $view->with('global_setting', app('settings'));
