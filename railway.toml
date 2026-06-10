@@ -1,0 +1,22 @@
+# Konfigurasi untuk Railway.app
+# Dokumentasi: https://docs.railway.app/reference/railway-toml
+
+[build]
+# Menggunakan Nixpacks untuk membangun aplikasi secara otomatis.
+# Nixpacks akan mendeteksi PHP, Composer, dan Node.js.
+builder = "nixpacks"
+
+[deploy]
+# Perintah untuk menjalankan web server aplikasi Laravel.
+# --host 0.0.0.0 diperlukan agar server bisa diakses dari luar container.
+# $PORT adalah variabel yang disediakan oleh Railway.
+startCommand = "php artisan serve --host 0.0.0.0 --port $PORT"
+
+# Kebijakan restart jika aplikasi mengalami kegagalan.
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 5
+
+# Health check untuk memastikan aplikasi berjalan dengan baik.
+# Railway akan memeriksa endpoint ini. Jika gagal, deployment akan di-rollback.
+healthcheckPath = "/"
+healthcheckTimeout = 120 # Dalam detik
