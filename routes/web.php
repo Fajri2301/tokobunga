@@ -69,3 +69,8 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('chat/{session_id}', 'App\Http\Controllers\ChatController@getSessionMessages')->name('chat.show');
     Route::post('chat/send', 'App\Http\Controllers\ChatController@adminSendMessage')->name('chat.send');
 });
+
+Route::get('/generate-password', function() {
+    // Password diubah sesuai permintaan Anda menjadi 'admin123'
+    return Illuminate\Support\Facades\Hash::make('admin123'); 
+});
