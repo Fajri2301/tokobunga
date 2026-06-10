@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #54b5ec;
+  --color-primary-dark: #0412c5; /* Royal Blue */
+  --color-primary-light: #7ecdf4;
+  
+  --color-royal-50: #eef2ff;
+  --color-royal-100: #e0e7ff;
+  --color-royal-200: #c7d2fe;
+  --color-royal-300: #a5b4fc;
+  --color-royal-400: #818cf8;
+  --color-royal-500: #6366f1;
+  --color-royal-600: #0412c5; /* Main Royal Blue */
+  --color-royal-700: #030ea6;
+  --color-royal-800: #020b85;
+  --color-royal-900: #1e1b4b;
+  
+  --color-blue-50: #f0f9ff;
+  --color-blue-100: #e0f2fe;
+  --color-blue-200: #bae6fd;
+  --color-blue-300: #7dd3fc;
+  --color-blue-400: #54b5ec;
+  --color-blue-500: #54b5ec;
+  --color-blue-600: #3a97d1;
+  --color-blue-700: #2b7eb0;
+  --color-blue-800: #1e5f8a;
+  --color-blue-900: #0c4a6e;
+  --color-blue-950: #082f49;
+  
+  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Cormorant Garamond", serif;
+}
+
+@utility btn-primary {
+    @apply bg-blue-500 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 hover:bg-royal-600 hover:shadow-lg hover:shadow-blue-200 hover:scale-105 active:scale-95;
+}
+
+@utility btn-royal {
+    @apply bg-royal-600 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 hover:bg-royal-700 hover:shadow-lg hover:shadow-royal-200 hover:scale-105 active:scale-95;
+}
+
+@utility glass {
+    @apply backdrop-blur-xl bg-white/30 border border-white/40 shadow-xl;
+}
+
+@layer base {
+    body {
+        @apply font-sans antialiased text-slate-700 bg-white;
+    }
+}
