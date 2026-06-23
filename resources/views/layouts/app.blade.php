@@ -261,7 +261,7 @@
     </button>
 
     <!-- Chat Window -->
-    <div id="chat-window" class="absolute bottom-20 right-0 w-[350px] bg-white rounded-3xl shadow-2xl border border-slate-100 hidden flex flex-col overflow-hidden animate-fade-in-up">
+    <div id="chat-window" class="absolute bottom-20 right-0 w-[calc(100vw-3rem)] sm:w-[350px] max-h-[75vh] bg-white rounded-3xl shadow-2xl border border-slate-100 hidden flex flex-col overflow-hidden animate-fade-in-up">
         <!-- Header -->
         <div class="bg-[#545454] p-5 text-white flex items-center justify-between">
             <div class="flex items-center gap-3">
@@ -277,7 +277,7 @@
         </div>
 
         <!-- Messages Area -->
-        <div id="chat-messages" class="flex-1 h-80 overflow-y-auto p-4 space-y-4 bg-slate-50 no-scrollbar">
+        <div id="chat-messages" class="flex-1 min-h-[250px] overflow-y-auto p-4 space-y-4 bg-slate-50">
             <!-- Messages will appear here -->
             <div class="bg-blue-50 p-3 rounded-2xl rounded-tl-none text-xs text-slate-700 max-w-[80%] border border-blue-100">
                 Halo! Ada yang bisa Flora bantu hari ini? 🌸
@@ -350,8 +350,10 @@
         }
 
         function scrollToBottom() {
-            const container = document.getElementById('chat-messages');
-            if(container) container.scrollTop = container.scrollHeight;
+            setTimeout(() => {
+                const container = document.getElementById('chat-messages');
+                if(container) container.scrollTop = container.scrollHeight;
+            }, 100);
         }
 
         // Send Message

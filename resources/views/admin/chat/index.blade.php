@@ -136,6 +136,20 @@
         const originalText = message;
         input.value = '';
 
+        // Optimistic UI: Tampilkan langsung di layar seperti WhatsApp
+        const container = document.getElementById('chat-messages');
+        const timeStr = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        const html = `
+            <div class="flex justify-end animate-fade-in">
+                <div class="bg-blue-600 text-white rounded-tr-none shadow-blue-200 p-4 rounded-3xl text-sm max-w-[85%] md:max-w-[70%] shadow-sm relative">
+                    <p class="font-medium leading-relaxed">${originalText}</p>
+                    <p class="text-[9px] text-white/50 mt-2 text-right">${timeStr}</p>
+                </div>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+        container.scrollTop = container.scrollHeight;
+
         try {
             const res = await fetch('{{ route("admin.chat.send") }}', {
                 method: 'POST',
@@ -164,11 +178,8 @@
         if (window.Echo) {
             window.Echo.channel('admin.chats')
                 .listen('.message.sent', (e) => {
-                    if(currentSession === e.session_id) {
+                    if(e.message && currentSession === e.message.session_id) {
                         loadMessages(currentSession);
-                    } else {
-                        // Optional: show a small dot on sidebar or notify
-                        // location.reload(); 
                     }
                 });
         }
