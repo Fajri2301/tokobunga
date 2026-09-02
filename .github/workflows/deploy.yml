@@ -52,7 +52,7 @@ jobs:
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         local-dir: ./public/
-        server-dir: /public_html/
+        server-dir: /public_html/zankidausat.com/zankidausat/
         state-name: .ftp-deploy-sync-state-public.json
 
     - name: 🚀 Sync core (tokobunga)
