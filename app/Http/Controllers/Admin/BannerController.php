@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Storage;
 
 class BannerController extends Controller
 {
+    use \App\Traits\HasImageUpload;
+
     public function index()
     {
         $banners = Banner::latest()->paginate(10);
@@ -29,7 +31,7 @@ class BannerController extends Controller
             'type' => 'required|string|in:hero,iklan',
         ]);
 
-        $imagePath = $request->file('image')->store('banners', 'public');
+        $imagePath = $this->uploadImage($request->file('image'), 'banners');
 
         Banner::create([
             'title' => $request->title,
@@ -45,7 +47,7 @@ class BannerController extends Controller
     public function destroy(Banner $banner)
     {
         if ($banner->image) {
-            Storage::disk('public')->delete($banner->image);
+            $this->deleteImage($banner->image);
         }
         $banner->delete();
         return redirect()->route('admin.banners.index')->with('success', 'Banner berhasil dihapus.');

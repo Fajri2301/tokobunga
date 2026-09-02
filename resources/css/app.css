@@ -1,51 +1,251 @@
 @import "tailwindcss";
 
+/* ─────────────────────────────────────────────────────────
+   DESIGN TOKENS — Zanki Dausat Flower Premium Redesign
+   Palette: Cyan #0cc0df · Blush Rose #F4799A · Deep Navy #0D2137
+   ───────────────────────────────────────────────────────── */
 @theme {
-  --color-primary: #54b5ec;
-  --color-primary-dark: #0412c5; /* Royal Blue */
-  --color-primary-light: #7ecdf4;
-  
-  --color-royal-50: #eef2ff;
-  --color-royal-100: #e0e7ff;
-  --color-royal-200: #c7d2fe;
-  --color-royal-300: #a5b4fc;
-  --color-royal-400: #818cf8;
-  --color-royal-500: #6366f1;
-  --color-royal-600: #0412c5; /* Main Royal Blue */
-  --color-royal-700: #030ea6;
-  --color-royal-800: #020b85;
-  --color-royal-900: #1e1b4b;
-  
-  --color-blue-50: #f0f9ff;
-  --color-blue-100: #e0f2fe;
-  --color-blue-200: #bae6fd;
-  --color-blue-300: #7dd3fc;
-  --color-blue-400: #54b5ec;
-  --color-blue-500: #54b5ec;
-  --color-blue-600: #3a97d1;
-  --color-blue-700: #2b7eb0;
-  --color-blue-800: #1e5f8a;
-  --color-blue-900: #0c4a6e;
-  --color-blue-950: #082f49;
-  
-  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Cormorant Garamond", serif;
+  /* ── Brand Core — Primary: Cyan Fresh ───────────── */
+  --color-cyan:          #0cc0df;
+  --color-cyan-dark:     #09a8c4;
+  --color-cyan-deeper:   #077d93;
+  --color-cyan-light:    #E0F9FD;
+  --color-cyan-50:       #F0FCFE;
+  --color-cyan-100:      #C8F4FB;
+  --color-cyan-200:      #90E8F6;
+
+  /* ── Accent — Blush Rose ─────────────────────────── */
+  --color-blush:         #F4799A;
+  --color-blush-light:   #FDE8EF;
+  --color-blush-dark:    #d95c81;
+
+  /* ── Dark Anchor — Deep Navy ─────────────────────── */
+  --color-navy:          #0D2137;
+  --color-navy-soft:     #1A3A57;
+  --color-navy-muted:    #2E5077;
+
+  /* ── Neutral / Background ────────────────────────── */
+  --color-ivory:         #FAF8F5;
+  --color-ivory-dark:    #F2EFE9;
+  --color-warm-white:    #FFFFFF;
+  --color-border:        #E0F9FD;
+  --color-border-dark:   #90E8F6;
+
+  /* ── Text ────────────────────────────────────────── */
+  --color-charcoal:      #0D2137;
+  --color-charcoal-soft: #1A3A57;
+  --color-muted:         #6B8899;
+  --color-muted-light:   #A0B8C8;
+
+  /* ── Legacy aliases (admin / komponen lama) ──────── */
+  --color-sage:          #0cc0df;
+  --color-sage-dark:     #09a8c4;
+  --color-sage-deeper:   #077d93;
+  --color-sage-light:    #E0F9FD;
+  --color-sage-50:       #F0FCFE;
+  --color-sage-100:      #C8F4FB;
+  --color-sage-200:      #90E8F6;
+  --color-primary:       #0cc0df;
+  --color-primary-dark:  #09a8c4;
+  --color-primary-light: #C8F4FB;
+
+  /* ── Typography — Single Source of Truth ─────────── */
+  --font-sans:   "Neue Montreal", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-serif:  "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-mono:   ui-monospace, "Cascadia Code", monospace;
 }
 
+/* ─────────────────────────────────────────────────────────
+   KEYFRAMES
+   ───────────────────────────────────────────────────────── */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+@keyframes slideInLeft {
+    from { opacity: 0; transform: translateX(-24px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes slideInRight {
+    from { opacity: 0; transform: translateX(24px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.96); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+/* ─────────────────────────────────────────────────────────
+   ANIMATION UTILITIES
+   ───────────────────────────────────────────────────────── */
+@utility animate-fade-in-up {
+    animation: fadeInUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@utility animate-fade-in {
+    animation: fadeIn 0.4s ease both;
+}
+@utility animate-slide-in-left {
+    animation: slideInLeft 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@utility animate-slide-in-right {
+    animation: slideInRight 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@utility animate-scale-in {
+    animation: scaleIn 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Stagger delay helpers */
+@utility delay-75  { animation-delay: 75ms; }
+@utility delay-100 { animation-delay: 100ms; }
+@utility delay-150 { animation-delay: 150ms; }
+@utility delay-200 { animation-delay: 200ms; }
+@utility delay-300 { animation-delay: 300ms; }
+@utility delay-400 { animation-delay: 400ms; }
+@utility delay-500 { animation-delay: 500ms; }
+
+/* Scroll-reveal */
+@utility reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+@utility reveal-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ─────────────────────────────────────────────────────────
+   COMPONENT UTILITIES
+   ───────────────────────────────────────────────────────── */
 @utility btn-primary {
-    @apply bg-blue-500 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 hover:bg-royal-600 hover:shadow-lg hover:shadow-blue-200 hover:scale-105 active:scale-95;
+    @apply bg-sage text-white font-semibold py-3 px-8 rounded-full
+           transition-all duration-200
+           hover:bg-sage-dark hover:shadow-md active:scale-95;
+}
+@utility btn-outline {
+    @apply bg-transparent text-sage font-semibold py-3 px-8 rounded-full border border-sage
+           transition-all duration-200
+           hover:bg-sage hover:text-white active:scale-95;
+}
+@utility card-hover {
+    @apply transition-all duration-200 ease-out
+           hover:-translate-y-1 hover:shadow-md;
 }
 
-@utility btn-royal {
-    @apply bg-royal-600 text-white font-bold py-3 px-8 rounded-full transition-all duration-300 hover:bg-royal-700 hover:shadow-lg hover:shadow-royal-200 hover:scale-105 active:scale-95;
-}
-
-@utility glass {
-    @apply backdrop-blur-xl bg-white/30 border border-white/40 shadow-xl;
-}
-
+/* ─────────────────────────────────────────────────────────
+   BASE STYLES
+   ───────────────────────────────────────────────────────── */
 @layer base {
-    body {
-        @apply font-sans antialiased text-slate-700 bg-white;
+    *, *::before, *::after {
+        box-sizing: border-box;
     }
+
+    html {
+        scroll-behavior: smooth;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+    }
+
+    body {
+        font-family: var(--font-sans);
+        color: #FAF8F5; /* light text on dark navy bg */
+        background: linear-gradient(160deg, #0A1E33 0%, #0D2137 40%, #0A2845 100%);
+        min-height: 100vh;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: var(--font-sans);
+        color: #FAF8F5;
+    }
+
+    /* Custom scrollbar — subtle, branded */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb {
+        background: #90E8F6;
+        border-radius: 99px;
+    }
+    ::-webkit-scrollbar-thumb:hover { background: #0cc0df; }
+}
+
+/* ─────────────────────────────────────────────────────────
+   HOME PAGE — Swiper & Banner
+   (Dipindah dari inline <style> di home.blade.php)
+   ───────────────────────────────────────────────────────── */
+.hero-swiper {
+    width: 100%;
+    height: auto;
+    padding-bottom: 20px;
+}
+.swiper-pagination-bullet-active {
+    background: #0cc0df !important;
+}
+.swiper-slide {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+}
+.swiper-slide-active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Ad banner responsive clip-path */
+:root {
+    --b-radius: 30px;
+    --b-bevel: 60px;
+}
+@media (min-width: 768px) {
+    :root {
+        --b-radius: 60px;
+        --b-bevel: 120px;
+    }
+}
+.ad-banner-custom-cut {
+    clip-path: polygon(
+        0% var(--b-radius),
+        calc(var(--b-radius) * 0.13) calc(var(--b-radius) * 0.5),
+        calc(var(--b-radius) * 0.41) calc(var(--b-radius) * 0.2),
+        var(--b-radius) 0%,
+        calc(100% - var(--b-bevel)) 0%,
+        100% var(--b-bevel),
+        100% calc(100% - var(--b-radius)),
+        calc(100% - (var(--b-radius) * 0.13)) calc(100% - (var(--b-radius) * 0.5)),
+        calc(100% - (var(--b-radius) * 0.41)) calc(100% - (var(--b-radius) * 0.2)),
+        calc(100% - var(--b-radius)) 100%,
+        var(--b-bevel) 100%,
+        0% calc(100% - var(--b-bevel))
+    );
+}
+
+/* Scrollbar hide utility */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* Card strict proportions */
+.img-ratio-1-2  { aspect-ratio: 1 / 2; }
+.info-ratio-1-1 { aspect-ratio: 1 / 1; }
+
+/* ── Hero slider nav (custom, bukan default biru swiper) ── */
+.hero-prev.swiper-button-disabled,
+.hero-next.swiper-button-disabled {
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+/* ── Fade-in gambar saat selesai dimuat (anti pop-in kasar) ── */
+img.img-loading { opacity: 0; }
+img.img-loaded  { animation: img-fade-in 0.45s ease forwards; }
+@keyframes img-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }

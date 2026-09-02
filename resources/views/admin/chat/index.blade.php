@@ -116,7 +116,7 @@
             const html = `
                 <div class="flex ${isMe ? 'justify-end' : 'justify-start'} animate-fade-in">
                     <div class="${bgClass} p-4 rounded-3xl text-sm max-w-[85%] md:max-w-[70%] shadow-sm relative">
-                        ${isBot ? '<p class="text-[8px] font-black uppercase opacity-50 mb-1">Flora Bot AI</p>' : ''}
+                        ${isBot ? '<p class="text-[8px] font-black uppercase opacity-50 mb-1">Zanki Dausat Flower Bot AI</p>' : ''}
                         <p class="font-medium leading-relaxed">${msg.message}</p>
                         <p class="text-[9px] ${isMe ? 'text-white/50' : 'text-slate-400'} mt-2 text-right">${new Date(msg.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</p>
                     </div>

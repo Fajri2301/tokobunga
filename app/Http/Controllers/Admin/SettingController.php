@@ -54,12 +54,8 @@ class SettingController extends Controller
                 'address', 'google_maps_link', 'instagram_url', 'facebook_url', 'footer_text'
             ]);
 
-            // Security: XSS Protection for Google Maps
-            if (!empty($data['google_maps_link'])) {
-                if (!str_contains($data['google_maps_link'], '<iframe')) {
-                    return back()->withErrors(['google_maps_link' => 'Input harus berupa kode <iframe> Google Maps yang valid.'])->withInput();
-                }
-            }
+            // Google Maps: terima URL biasa ATAU kode <iframe> embed
+            // (tidak ada validasi ketat di sini, user bebas isi salah satu)
 
             // Handle Logo
             if ($request->hasFile('site_logo')) {

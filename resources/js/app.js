@@ -18,12 +18,12 @@ document.addEventListener('DOMContentLoaded', () => {
             disableOnInteraction: false,
         },
         pagination: {
-            el: '.swiper-pagination',
+            el: '.hero-swiper .swiper-pagination',
             clickable: true,
         },
         navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
+            nextEl: '.hero-next',
+            prevEl: '.hero-prev',
         },
     });
 
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
             delay: 4000,
         },
         pagination: {
-            el: '.swiper-pagination',
+            el: '.bento-swiper .swiper-pagination',
             clickable: true,
         },
     });

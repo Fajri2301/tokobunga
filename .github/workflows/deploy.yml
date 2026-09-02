@@ -1,0 +1,77 @@
+name: Deploy Laravel to cPanel via FTP
+
+on:
+  push:
+    branches:
+      - main # Jalankan otomatis jika ada push ke branch main
+
+jobs:
+  web-deploy:
+    name: Deploy to cPanel
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v4
+      
+    - name: ⚙️ Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.3' # Sesuaikan dengan versi PHP di cPanel Anda
+        extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, bcmath
+        
+    - name: 📦 Install Composer Dependencies
+      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --no-dev
+      
+    - name: ⚙️ Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20' # Menggunakan versi 20 LTS agar konsisten dengan CI di atas
+        
+    - name: 📦 Install NPM Dependencies
+      run: npm install
+      
+    - name: 🏗️ Build Assets (Vite)
+      run: npm run build
+
+    - name: ➕ Track built assets for FTP sync
+      run: |
+        git config --global user.name "github-actions"
+        git config --global user.email "github-actions@github.com"
+        git add -f public/build
+
+    - name: 🔧 Patch index.php for cPanel
+      run: |
+        sed -i "s|__DIR__.'/../vendor/autoload.php'|__DIR__.'/../tokobunga/vendor/autoload.php'|g" public/index.php
+        sed -i "s|__DIR__.'/../bootstrap/app.php'|__DIR__.'/../tokobunga/bootstrap/app.php'|g" public/index.php
+
+    - name: 🚀 Sync public_html
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ./public/
+        server-dir: /public_html/
+        state-name: .ftp-deploy-sync-state-public.json
+
+    - name: 🚀 Sync core (tokobunga)
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ./
+        server-dir: /tokobunga/
+        state-name: .ftp-deploy-sync-state-core.json
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
+          **/vendor/**
+          **/public/**
+          **/tests/**
+          **/storage/**
+          .github/**
+          .env.example
+          phpunit.xml

@@ -21,7 +21,8 @@ class CatalogController extends Controller
         }
 
         $categories = \Illuminate\Support\Facades\Cache::remember('categories_all', $ttl, function() {
-            return Category::all();
+            // FIX N+1: withCount agar badge count tidak trigger query per-kategori di view
+            return Category::withCount('products')->get();
         });
 
         $featuredProducts = \Illuminate\Support\Facades\Cache::remember('featured_products', $ttl, function() {

@@ -22,3 +22,8 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Database file lokal (jangan pernah commit data produksi)
+/tokobunga
+/database/*.sqlite
+*.sqlite-journal

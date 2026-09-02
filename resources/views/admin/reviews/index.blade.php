@@ -39,7 +39,7 @@
                     </td>
                     <td class="px-6 py-4 text-center">
                         @if($review->is_approved)
-                            <span class="px-3 py-1 bg-green-100 text-green-700 text-[10px] font-black uppercase tracking-widest rounded-full">Disetujui</span>
+                            <span class="px-3 py-1 bg-[#0cc0df]/15 text-[#0cc0df] text-[10px] font-black uppercase tracking-widest rounded-full">Disetujui</span>
                         @else
                             <span class="px-3 py-1 bg-yellow-100 text-yellow-700 text-[10px] font-black uppercase tracking-widest rounded-full">Pending</span>
                         @endif

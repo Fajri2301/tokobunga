@@ -125,8 +125,9 @@
                         <textarea name="address" rows="3" class="w-full px-5 py-4 rounded-2xl bg-slate-50 border border-slate-200 outline-none transition-all font-medium">{{ old('address', $setting->address) }}</textarea>
                     </div>
                     <div>
-                        <label class="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Link Embed Google Maps</label>
-                        <textarea name="google_maps_link" rows="3" class="w-full px-5 py-4 rounded-2xl bg-slate-50 border border-slate-200 outline-none transition-all font-medium" placeholder="https://www.google.com/maps/embed?pb=...">{{ old('google_maps_link', $setting->google_maps_link) }}</textarea>
+                        <label class="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Link / Embed Google Maps</label>
+                        <textarea name="google_maps_link" rows="4" class="w-full px-5 py-4 rounded-2xl bg-slate-50 border border-slate-200 outline-none transition-all font-medium" placeholder="Isi dengan URL Google Maps (https://maps.google.com/...) ATAU kode embed &lt;iframe src=&quot;...&quot;&gt;">{{ old('google_maps_link', $setting->google_maps_link) }}</textarea>
+                        <p class="text-xs text-slate-400 mt-2 ml-1">Bisa isi URL biasa atau kode &lt;iframe&gt; dari Google Maps → Share → Embed a map.</p>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>

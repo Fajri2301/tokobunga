@@ -5,9 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - {{ $global_setting->site_name }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Neue Montreal via Fontshare -->
+    <link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+    <link href="https://api.fontshare.com/v2/css?f[]=neue-montreal@300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+    <!-- Cormorant Garamond — Latin accent -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Poppins', sans-serif; }
+        body { /* font-family diatur via --font-sans di app.css */ }
         .sidebar-active { transform: translateX(0); }
         .mobile-overlay-active { opacity: 1; visibility: visible; }
         [x-cloak] { display: none !important; }
@@ -24,7 +30,7 @@
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
         .btn-premium {
-            background-color: #87ceeb;
+            background-color: #0cc0df;
             color: white;
             transition: all 0.3s ease;
         }
@@ -73,7 +79,7 @@
                 @endphp
 
                 @foreach($menus as $menu)
-                <a href="{{ route($menu['route']) }}" class="group flex items-center px-6 py-4 rounded-2xl transition-all duration-300 {{ request()->routeIs($menu['route'] . '*') ? 'bg-[#87ceeb] text-white shadow-xl shadow-[#87ceeb]/20' : 'text-white/50 hover:bg-white/5 hover:text-white' }}">
+                <a href="{{ route($menu['route']) }}" class="group flex items-center px-6 py-4 rounded-2xl transition-all duration-300 {{ request()->routeIs($menu['route'] . '*') ? 'bg-[#0cc0df] text-white shadow-xl shadow-[#0cc0df]/20' : 'text-white/50 hover:bg-white/5 hover:text-white' }}">
                     <svg class="w-5 h-5 mr-4 transition-transform group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="{{ $menu['icon'] }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                     <span class="font-bold text-xs uppercase tracking-widest">{{ $menu['label'] }}</span>
                 </a>
@@ -120,7 +126,7 @@
 
                     <div class="text-right hidden sm:block">
                         <p class="text-[10px] font-black text-[#545454] leading-none uppercase tracking-widest">{{ Auth::user()->name }}</p>
-                        <p class="text-[9px] font-bold text-[#87ceeb] mt-1 uppercase tracking-[0.2em]">Super Admin</p>
+                        <p class="text-[9px] font-bold text-[#0cc0df] mt-1 uppercase tracking-[0.2em]">Super Admin</p>
                     </div>
                     <div class="h-10 w-10 rounded-2xl bg-[#545454] flex items-center justify-center text-white font-black shadow-lg shadow-[#545454]/20 uppercase">
                         {{ substr(Auth::user()->name, 0, 1) }}
@@ -155,7 +161,7 @@
     @if(session('success'))
     <div id="successToast" class="fixed bottom-10 left-1/2 transform -translate-x-1/2 z-[100] transition-all duration-500 translate-y-20 opacity-0">
         <div class="bg-[#545454] text-white px-8 py-4 rounded-2xl shadow-2xl flex items-center gap-4 border border-white/10">
-            <div class="h-8 w-8 bg-[#87ceeb] rounded-full flex items-center justify-center">
+            <div class="h-8 w-8 bg-[#0cc0df] rounded-full flex items-center justify-center">
                 <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
             </div>
             <span class="text-xs font-bold uppercase tracking-widest">{{ session('success') }}</span>
