@@ -24,8 +24,8 @@
     <meta property="twitter:description" content="@yield('meta_description', $global_setting->meta_description)">
     <meta property="twitter:image" content="@yield('og_image', asset('assets/Home.svg'))">
 
-    @if($global_setting->favicon)
-        <link rel="icon" type="image/x-icon" href="{{ Storage::url($global_setting->favicon) }}">
+    @if($global_setting->site_favicon)
+        <link rel="icon" href="{{ Storage::url($global_setting->site_favicon) }}">
     @endif
     
     <!-- Neue Montreal via Fontshare (free CDN) -->
@@ -108,10 +108,14 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 w-full flex justify-between items-center">
             <!-- Logo Flora -->
             <a href="{{ route('home') }}" class="flex items-center gap-2 sm:gap-3 min-w-0">
-                <div class="w-9 h-9 sm:w-10 sm:h-10 shrink-0 bg-white rounded-xl flex items-center justify-center text-[#0cc0df] shadow-sm">
-                    <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z"/></svg>
+                <div class="w-9 h-9 sm:w-10 sm:h-10 shrink-0 bg-white rounded-xl flex items-center justify-center text-[#0cc0df] shadow-sm overflow-hidden">
+                    @if($global_setting->site_logo)
+                        <img src="{{ Storage::url($global_setting->site_logo) }}" alt="Logo" class="w-full h-full object-cover">
+                    @else
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z"/></svg>
+                    @endif
                 </div>
-                <span class="logo-text text-base sm:text-[20px] font-bold tracking-tight transition-colors duration-300 truncate">Zanki Dausat Flower</span>
+                <span class="logo-text text-base sm:text-[20px] font-bold tracking-tight transition-colors duration-300 truncate">{{ $global_setting->site_name }}</span>
             </a>
             
             <!-- Desktop Menu -->

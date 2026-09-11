@@ -51,8 +51,12 @@
         <aside id="sidebar" class="fixed inset-y-0 left-0 w-72 bg-[#545454] text-white z-50 transform -translate-x-full transition-transform duration-300 ease-in-out md:relative md:translate-x-0 flex flex-col shadow-2xl">
             <div class="p-8 border-b border-white/10 flex items-center justify-between">
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 group">
-                    <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-[#545454] shadow-lg group-hover:scale-110 transition-transform">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z"/></svg>
+                    <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-[#545454] shadow-lg group-hover:scale-110 transition-transform overflow-hidden">
+                        @if($global_setting->site_logo)
+                            <img src="{{ Storage::url($global_setting->site_logo) }}" alt="Logo" class="w-full h-full object-cover">
+                        @else
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z"/></svg>
+                        @endif
                     </div>
                     <div>
                         <span class="text-lg font-black tracking-tighter uppercase leading-none block">{{ $global_setting->site_name }}</span>

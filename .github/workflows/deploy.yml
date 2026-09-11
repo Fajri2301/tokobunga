@@ -32,6 +32,10 @@ jobs:
       run: npm install
       
     - name: 🏗️ Build Assets (Vite)
+      env:
+        VITE_BROADCASTER: pusher
+        VITE_PUSHER_APP_KEY: ${{ secrets.VITE_PUSHER_APP_KEY }}
+        VITE_PUSHER_APP_CLUSTER: ${{ secrets.VITE_PUSHER_APP_CLUSTER }}
       run: npm run build
 
     - name: ➕ Track built assets for FTP sync
