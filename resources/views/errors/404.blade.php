@@ -1,5 +1,8 @@
 @extends('layouts.app')
 
+@php
+    $global_setting = app('settings');
+@endphp
 @section('title', 'Halaman Tidak Ditemukan - ' . $global_setting->site_name)
 
 @section('content')
