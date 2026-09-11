@@ -47,6 +47,8 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::resource('categories', 'App\Http\Controllers\Admin\CategoryController');
     Route::resource('products', 'App\Http\Controllers\Admin\ProductController');
     Route::resource('banners', 'App\Http\Controllers\Admin\BannerController');
+    Route::resource('users', 'App\Http\Controllers\Admin\UserController');
+
     
     // Orders Management
     Route::get('orders', 'App\Http\Controllers\Admin\OrderController@index')->name('orders.index');
