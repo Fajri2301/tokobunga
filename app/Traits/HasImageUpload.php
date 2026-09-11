@@ -27,15 +27,25 @@ trait HasImageUpload
             $filename = uniqid('img_') . '_' . time() . '.webp';
             $path = $folder . '/' . $filename;
 
-            // Baca image dengan Intervention v3 lalu convert ke WebP kualitas 80%
-            $image = \Intervention\Image\Laravel\Facades\Image::read($file->getRealPath());
-            $encoded = $image->toWebp(80);
+            // Dukungan untuk Intervention Image v2 dan v3
+            if (method_exists(\Intervention\Image\ImageManager::class, 'read')) {
+                // Syntax Intervention v3
+                $image = \Intervention\Image\Laravel\Facades\Image::read($file->getRealPath());
+                $encoded = $image->toWebp(80);
+            } else {
+                // Syntax Intervention v2 (Fallback)
+                $facade = class_exists(\Intervention\Image\Facades\Image::class) 
+                    ? \Intervention\Image\Facades\Image::class 
+                    : \Intervention\Image\ImageManagerStatic::class;
+                $image = $facade::make($file->getRealPath());
+                $encoded = $image->encode('webp', 80);
+            }
             
             // Simpan ke storage public
             Storage::disk('public')->put($path, (string) $encoded);
             
             return $path;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             // Jika terjadi error pada proses convert, gunakan cara normal sebagai fallback
             \Illuminate\Support\Facades\Log::error('Image optimization failed: ' . $e->getMessage());
             return $file->store($folder, 'public');
