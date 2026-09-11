@@ -46,6 +46,8 @@
             background: linear-gradient(160deg, #0A1E33 0%, #0D2137 40%, #0A2845 100%);
             background-attachment: fixed;
             color: #FAF8F5;
+            overflow-x: hidden;
+            width: 100%;
         }
         body {
             min-height: 100vh;

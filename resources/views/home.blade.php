@@ -4,7 +4,7 @@
 
     <!-- 5B. Hero Section -->
     <section class="pt-24 sm:pt-28 md:pt-36 max-w-7xl mx-auto px-4 sm:px-6 md:px-16 relative z-10">
-        <div class="swiper hero-swiper !overflow-visible"> 
+        <div class="swiper hero-swiper overflow-hidden md:!overflow-visible"> 
             <div class="swiper-wrapper">
                 @forelse($banners as $banner)
                     <div class="swiper-slide">
