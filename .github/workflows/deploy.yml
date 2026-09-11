@@ -38,11 +38,15 @@ jobs:
         VITE_PUSHER_APP_CLUSTER: ${{ secrets.VITE_PUSHER_APP_CLUSTER }}
       run: npm run build
 
-    - name: ➕ Track built assets for FTP sync
-      run: |
-        git config --global user.name "github-actions"
-        git config --global user.email "github-actions@github.com"
-        git add -f public/build
+    - name: 🚀 Sync built assets
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      with:
+        server: ${{ secrets.FTP_SERVER }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ./public/build/
+        server-dir: /public_html/zankidausat/build/
+        dangerous-clean-slate: true
 
     - name: 🔧 Patch index.php for cPanel
       run: |
