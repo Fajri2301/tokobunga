@@ -39,11 +39,6 @@ jobs:
       run: |
         npm run build
 
-    - name: 🔧 Patch index.php for cPanel
-      run: |
-        sed -i "s|__DIR__.'/../vendor/autoload.php'|__DIR__.'/../../zankidausat/vendor/autoload.php'|g" public/index.php
-        sed -i "s|__DIR__.'/../bootstrap/app.php'|__DIR__.'/../../zankidausat/bootstrap/app.php'|g" public/index.php
-
     - name: ➕ Commit built assets and patched index
       run: |
         git config --global user.name "github-actions[bot]"
