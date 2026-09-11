@@ -186,15 +186,6 @@
 .swiper-pagination-bullet-active {
     background: #0cc0df !important;
 }
-.swiper-slide {
-    opacity: 0;
-    transition: opacity 0.5s ease;
-    pointer-events: none;
-}
-.swiper-slide-active {
-    opacity: 1;
-    pointer-events: auto;
-}
 
 /* Ad banner responsive clip-path */
 :root {

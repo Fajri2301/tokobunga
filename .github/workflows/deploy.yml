@@ -21,7 +21,7 @@ jobs:
         extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, bcmath
         
     - name: 📦 Install Composer Dependencies
-      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --no-dev
+      run: composer install -q --no-ansi --no-interaction --no-progress --prefer-dist --no-dev
       
     - name: ⚙️ Setup Node.js
       uses: actions/setup-node@v4
@@ -70,7 +70,6 @@ jobs:
           **/.git*
           **/.git*/**
           **/node_modules/**
-          **/vendor/**
           **/public/**
           **/tests/**
           **/storage/**
