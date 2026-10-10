@@ -51,6 +51,9 @@ class User extends Authenticatable
 
     public function isAdmin(): bool
     {
-        return $this->is_admin;
+        // Existing deployments may not have executed the role migration yet.
+        // Preserve the legacy authenticated-admin behaviour until that migration
+        // provides an explicit role value for every account.
+        return $this->is_admin === null ? true : (bool) $this->is_admin;
     }
 }
