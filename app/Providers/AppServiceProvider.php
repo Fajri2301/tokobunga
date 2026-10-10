@@ -22,7 +22,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(SettingRepositoryInterface::class, SettingRepository::class);
         $this->app->singleton(AIChatServiceInterface::class, OpenRouterService::class);
 
-        $this->app->singleton('settings', function () {
+        $this->app->bind('settings', function () {
             return app(SettingRepositoryInterface::class)->getGlobalSettings();
         });
     }
