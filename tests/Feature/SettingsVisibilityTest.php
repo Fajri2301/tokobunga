@@ -18,6 +18,10 @@ class SettingsVisibilityTest extends TestCase
             'address' => 'Jl. Mawar No. 42, Jakarta',
         ]);
 
+        // CI uses MySQL and can reuse an application instance across tests.
+        // Ensure the view composer resolves the settings fixture created above.
+        app()->forgetInstance('settings');
+
         $this->get(route('pages.contact'))
             ->assertOk()
             ->assertSee('Jl. Mawar No. 42, Jakarta');
