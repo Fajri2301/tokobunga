@@ -4,16 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Banner;
+use App\Support\StorefrontCache;
+use App\Traits\HasImageUpload;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class BannerController extends Controller
 {
-    use \App\Traits\HasImageUpload;
+    use HasImageUpload;
 
     public function index()
     {
         $banners = Banner::latest()->paginate(10);
+
         return view('admin.banners.index', compact('banners'));
     }
 
@@ -40,6 +42,7 @@ class BannerController extends Controller
             'image' => $imagePath,
             'is_active' => true,
         ]);
+        StorefrontCache::forget();
 
         return redirect()->route('admin.banners.index')->with('success', 'Banner berhasil diunggah.');
     }
@@ -50,6 +53,8 @@ class BannerController extends Controller
             $this->deleteImage($banner->image);
         }
         $banner->delete();
+        StorefrontCache::forget();
+
         return redirect()->route('admin.banners.index')->with('success', 'Banner berhasil dihapus.');
     }
 }

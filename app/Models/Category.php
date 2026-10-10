@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Category extends Model
 {
     use HasFactory;
+
     protected $fillable = ['name', 'slug', 'image', 'is_active_on_home'];
 
     public function products()
@@ -33,12 +34,12 @@ class Category extends Model
 
     private static function generateUniqueSlug($name)
     {
-        $slug = \Illuminate\Support\Str::slug($name);
+        $slug = Str::slug($name);
         $originalSlug = $slug;
         $count = 1;
 
         while (static::where('slug', $slug)->exists()) {
-            $slug = $originalSlug . '-' . $count++;
+            $slug = $originalSlug.'-'.$count++;
         }
 
         return $slug;

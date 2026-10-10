@@ -75,6 +75,12 @@
 <script>
     let currentSession = null;
 
+    function escapeHtml(value) {
+        const element = document.createElement('div');
+        element.textContent = value ?? '';
+        return element.innerHTML;
+    }
+
     function backToList() {
         document.getElementById('chat-main').classList.add('translate-x-full');
     }
@@ -117,7 +123,7 @@
                 <div class="flex ${isMe ? 'justify-end' : 'justify-start'} animate-fade-in">
                     <div class="${bgClass} p-4 rounded-3xl text-sm max-w-[85%] md:max-w-[70%] shadow-sm relative">
                         ${isBot ? '<p class="text-[8px] font-black uppercase opacity-50 mb-1">Zanki Dausat Flower Bot AI</p>' : ''}
-                        <p class="font-medium leading-relaxed">${msg.message}</p>
+                        <p class="font-medium leading-relaxed">${escapeHtml(msg.message)}</p>
                         <p class="text-[9px] ${isMe ? 'text-white/50' : 'text-slate-400'} mt-2 text-right">${new Date(msg.created_at).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</p>
                     </div>
                 </div>
@@ -142,7 +148,7 @@
         const html = `
             <div class="flex justify-end animate-fade-in">
                 <div class="bg-blue-600 text-white rounded-tr-none shadow-blue-200 p-4 rounded-3xl text-sm max-w-[85%] md:max-w-[70%] shadow-sm relative">
-                    <p class="font-medium leading-relaxed">${originalText}</p>
+                    <p class="font-medium leading-relaxed">${escapeHtml(originalText)}</p>
                     <p class="text-[9px] text-white/50 mt-2 text-right">${timeStr}</p>
                 </div>
             </div>
@@ -176,7 +182,7 @@
     // Real-time Listeners
     document.addEventListener('DOMContentLoaded', () => {
         if (window.Echo) {
-            window.Echo.channel('admin.chats')
+            window.Echo.private('admin.chats')
                 .listen('.message.sent', (e) => {
                     if(e.message && currentSession === e.message.session_id) {
                         loadMessages(currentSession);

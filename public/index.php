@@ -40,13 +40,18 @@ $appPaths = [
 ];
 foreach ($appPaths as $path) {
     if (file_exists($path)) {
+        /** @var Application $app */
         $app = require_once $path;
         break;
     }
 }
 
-if (!isset($app)) {
-    die("Error: Could not find bootstrap/app.php");
+if (! isset($app)) {
+    exit('Error: Could not find bootstrap/app.php');
 }
+
+// Tell Laravel that the public directory is THIS directory (public_html/zankidausat)
+// This is critical for Vite to find the correct manifest.json!
+$app->usePublicPath(__DIR__);
 
 $app->handleRequest(Request::capture());

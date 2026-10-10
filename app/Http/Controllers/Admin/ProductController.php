@@ -3,27 +3,28 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Product;
-use App\Models\Category;
 use App\Http\Requests\Admin\StoreProductRequest;
 use App\Http\Requests\Admin\UpdateProductRequest;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
+use App\Models\Category;
+use App\Models\Product;
+use App\Support\StorefrontCache;
+use App\Traits\HasImageUpload;
 
 class ProductController extends Controller
 {
-    use \App\Traits\HasImageUpload;
+    use HasImageUpload;
 
     public function index()
     {
         $products = Product::with('category')->latest()->paginate(10);
+
         return view('admin.products.index', compact('products'));
     }
 
     public function create()
     {
         $categories = Category::all();
+
         return view('admin.products.create', compact('categories'));
     }
 
@@ -42,6 +43,7 @@ class ProductController extends Controller
             'image' => $imagePath,
             'is_featured' => $request->has('is_featured'),
         ]);
+        StorefrontCache::forget();
 
         return redirect()->route('admin.products.index')->with('success', 'Produk berhasil ditambahkan.');
     }
@@ -49,6 +51,7 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         $categories = Category::all();
+
         return view('admin.products.edit', compact('product', 'categories'));
     }
 
@@ -67,6 +70,7 @@ class ProductController extends Controller
             'image' => $imagePath,
             'is_featured' => $request->has('is_featured'),
         ]);
+        StorefrontCache::forget();
 
         return redirect()->route('admin.products.index')->with('success', 'Produk berhasil diperbarui.');
     }
@@ -75,6 +79,8 @@ class ProductController extends Controller
     {
         // On soft delete, we DON'T delete the image because it might be restored.
         $product->delete();
+        StorefrontCache::forget();
+
         return redirect()->route('admin.products.index')->with('success', 'Produk berhasil dihapus (Soft Delete).');
     }
 
@@ -83,6 +89,7 @@ class ProductController extends Controller
         $product = Product::withTrashed()->findOrFail($id);
         $this->deleteImage($product->image);
         $product->forceDelete();
+
         return redirect()->back()->with('success', 'Produk berhasil dihapus permanen.');
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\About;
+use App\Support\StorefrontCache;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -22,7 +23,7 @@ class AboutController extends Controller
             'creativity_description' => 'Kami menyediakan berbagai pilihan rangkaian bunga berkualitas yang dirangkai dengan bunga segar pilihan dan desain elegan untuk berbagai kebutuhan dan momen penting Anda di wilayah Jabodetabek.',
             'experience_years' => '10+',
             'clients_count' => '5K+',
-            'fresh_flowers_pct' => '100%'
+            'fresh_flowers_pct' => '100%',
         ]);
 
         return view('admin.about.edit', compact('about'));
@@ -30,7 +31,7 @@ class AboutController extends Controller
 
     public function update(Request $request)
     {
-        $about = About::first();
+        $about = About::firstOrCreate(['id' => 1]);
 
         $request->validate([
             'title' => 'required|string|max:255',
@@ -75,6 +76,7 @@ class AboutController extends Controller
         }
 
         $about->update($data);
+        StorefrontCache::forget();
 
         return redirect()->back()->with('success', 'Informasi Tentang Kami & Creativity berhasil diperbarui.');
     }

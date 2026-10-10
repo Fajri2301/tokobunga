@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Contracts\SettingRepositoryInterface;
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
+use App\Traits\HasImageUpload;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
-use App\Contracts\SettingRepositoryInterface;
 
 class SettingController extends Controller
 {
-    use \App\Traits\HasImageUpload;
+    use HasImageUpload;
 
     protected SettingRepositoryInterface $repository;
 
@@ -23,6 +23,7 @@ class SettingController extends Controller
     public function edit()
     {
         $setting = $this->repository->getGlobalSettings();
+
         return view('admin.settings.edit', compact('setting'));
     }
 
@@ -50,8 +51,8 @@ class SettingController extends Controller
 
             $data = $request->only([
                 'site_name', 'meta_title', 'meta_description', 'meta_keywords',
-                'phone_number', 'whatsapp_number', 'email', 
-                'address', 'google_maps_link', 'instagram_url', 'facebook_url', 'footer_text'
+                'phone_number', 'whatsapp_number', 'email',
+                'address', 'google_maps_link', 'instagram_url', 'facebook_url', 'footer_text',
             ]);
 
             // Google Maps: terima URL biasa ATAU kode <iframe> embed
@@ -73,8 +74,9 @@ class SettingController extends Controller
             return redirect()->route('admin.settings.edit')->with('success', 'Pengaturan berhasil diperbarui.');
 
         } catch (\Exception $e) {
-            Log::error('Update Settings Error: ' . $e->getMessage());
-            return back()->withErrors(['error' => 'Terjadi kesalahan sistem: ' . $e->getMessage()])->withInput();
+            Log::error('Update Settings Error: '.$e->getMessage());
+
+            return back()->withErrors(['error' => 'Terjadi kesalahan sistem. Silakan coba lagi.'])->withInput();
         }
     }
 }

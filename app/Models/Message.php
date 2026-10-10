@@ -14,7 +14,7 @@ class Message extends Model
         'sender_type',
         'message',
         'metadata',
-        'is_read'
+        'is_read',
     ];
 
     protected $casts = [

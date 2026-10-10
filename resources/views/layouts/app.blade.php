@@ -409,8 +409,7 @@
             input.value = '';
 
             try {
-                // We don't need to handle the response here because the broadcast will do it.
-                await fetch('/chat/send', {
+                const response = await fetch('/chat/send', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -418,22 +417,19 @@
                     },
                     body: JSON.stringify({message: message})
                 });
+                if (!response.ok) throw new Error('Send error');
+                await loadChatHistory();
             } catch (err) { console.error('Send error:', err); }
         }
 
         // Initialize App Scripts
         document.addEventListener('DOMContentLoaded', () => {
-            // Real-time Chat Listener
-            if (window.Echo) {
-                const sessionId = '{{ session()->getId() }}';
-                window.Echo.channel('chat.' + sessionId)
-                    .listen('.message.sent', (event) => {
-                        // The full message object is now in event.message
-                        if(event.message.sender_type !== 'customer') {
-                            appendMessage(event.message);
-                        }
-                    });
-            }
+            window.setInterval(() => {
+                const chatWindow = document.getElementById('chat-window');
+                if (chatWindow && !chatWindow.classList.contains('hidden')) {
+                    loadChatHistory();
+                }
+            }, 10000);
 
             // Navbar Scroll Effect
             window.addEventListener('scroll', function() {

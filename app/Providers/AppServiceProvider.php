@@ -2,9 +2,15 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\View;
+use App\Contracts\AIChatServiceInterface;
+use App\Contracts\SettingRepositoryInterface;
+use App\Models\Category;
+use App\Repositories\SettingRepository;
 use App\Services\OpenRouterService;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,11 +19,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(\App\Contracts\SettingRepositoryInterface::class, \App\Repositories\SettingRepository::class);
-        $this->app->singleton(\App\Contracts\AIChatServiceInterface::class, OpenRouterService::class);
+        $this->app->singleton(SettingRepositoryInterface::class, SettingRepository::class);
+        $this->app->singleton(AIChatServiceInterface::class, OpenRouterService::class);
 
         $this->app->singleton('settings', function () {
-            return app(\App\Contracts\SettingRepositoryInterface::class)->getGlobalSettings();
+            return app(SettingRepositoryInterface::class)->getGlobalSettings();
         });
     }
 
@@ -27,15 +33,15 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         if ($this->app->environment('production')) {
-            \Illuminate\Support\Facades\URL::forceScheme('https');
+            URL::forceScheme('https');
         }
 
         // Optimization: Use selective view names instead of '*'
-        \Illuminate\Support\Facades\View::composer(['layouts.*', 'pages.*', 'catalog.*', 'home', 'admin.*', 'errors.*'], function ($view) {
+        View::composer(['layouts.*', 'pages.*', 'catalog.*', 'home', 'admin.*', 'errors.*'], function ($view) {
             $view->with('global_setting', app('settings'));
-            
-            $categories = \Illuminate\Support\Facades\Cache::remember('categories_global', 3600, function() {
-                return \App\Models\Category::all();
+
+            $categories = Cache::remember('categories_global', 3600, function () {
+                return Category::all();
             });
             $view->with('global_categories', $categories);
         });

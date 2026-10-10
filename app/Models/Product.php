@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
 
 class Product extends Model
 {
-    use SoftDeletes, HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = ['category_id', 'name', 'slug', 'description', 'price', 'image', 'is_featured'];
 
@@ -35,12 +35,12 @@ class Product extends Model
 
     private static function generateUniqueSlug($name)
     {
-        $slug = \Illuminate\Support\Str::slug($name);
+        $slug = Str::slug($name);
         $originalSlug = $slug;
         $count = 1;
 
         while (static::where('slug', $slug)->exists()) {
-            $slug = $originalSlug . '-' . $count++;
+            $slug = $originalSlug.'-'.$count++;
         }
 
         return $slug;

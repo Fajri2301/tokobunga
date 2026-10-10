@@ -7,6 +7,10 @@ use Illuminate\Support\Facades\Session;
 
 class CartService
 {
+    private const MAX_ITEMS = 50;
+
+    private const MAX_QUANTITY_PER_ITEM = 99;
+
     /**
      * Get the current cart from session.
      */
@@ -21,7 +25,7 @@ class CartService
     public function getCartWithDetails(): array
     {
         $cart = $this->getCart();
-        
+
         if (empty($cart)) {
             return [];
         }
@@ -56,18 +60,26 @@ class CartService
         $cart = $this->getCart();
 
         if (isset($cart[$productId])) {
-            $cart[$productId]['quantity']++;
+            $cart[$productId]['quantity'] = min(
+                $cart[$productId]['quantity'] + 1,
+                self::MAX_QUANTITY_PER_ITEM,
+            );
         } else {
+            if (count($cart) >= self::MAX_ITEMS) {
+                throw new \DomainException('Keranjang sudah mencapai batas maksimum produk.');
+            }
+
             $cart[$productId] = [
                 'name' => $product->name,
                 'quantity' => 1,
                 'price' => $product->price,
                 'image' => $product->image,
-                'slug' => $product->slug
+                'slug' => $product->slug,
             ];
         }
 
         Session::put('cart', $cart);
+
         return $cart;
     }
 
@@ -78,7 +90,7 @@ class CartService
     {
         $cart = $this->getCart();
         if (isset($cart[$productId]) && $quantity > 0) {
-            $cart[$productId]['quantity'] = $quantity;
+            $cart[$productId]['quantity'] = min($quantity, self::MAX_QUANTITY_PER_ITEM);
             Session::put('cart', $cart);
         } elseif (isset($cart[$productId]) && $quantity <= 0) {
             $this->removeFromCart($productId);
@@ -103,6 +115,7 @@ class CartService
     public function getTotal(): float
     {
         $cart = $this->getCartWithDetails();
+
         return array_reduce($cart, function ($carry, $item) {
             return $carry + ($item['subtotal'] ?? 0);
         }, 0);

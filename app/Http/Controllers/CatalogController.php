@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\About;
+use App\Models\Banner;
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\Banner;
-use App\Models\About;
 use App\Models\Review;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class CatalogController extends Controller
 {
@@ -15,33 +16,28 @@ class CatalogController extends Controller
     {
         $ttl = 3600; // 1 Hour
 
-        // If in debug mode, ignore cache to see changes immediately
-        if (config('app.debug')) {
-            \Illuminate\Support\Facades\Cache::flush();
-        }
-
-        $categories = \Illuminate\Support\Facades\Cache::remember('categories_all', $ttl, function() {
+        $categories = Cache::remember('categories_all', $ttl, function () {
             // FIX N+1: withCount agar badge count tidak trigger query per-kategori di view
             return Category::withCount('products')->get();
         });
 
-        $featuredProducts = \Illuminate\Support\Facades\Cache::remember('featured_products', $ttl, function() {
+        $featuredProducts = Cache::remember('featured_products', $ttl, function () {
             return Product::with('category')->where('is_featured', true)->take(4)->get();
         });
 
-        $banners = \Illuminate\Support\Facades\Cache::remember('banners_hero_active', $ttl, function() {
+        $banners = Cache::remember('banners_hero_active', $ttl, function () {
             return Banner::where('is_active', true)->where('type', 'hero')->latest()->get();
         });
 
-        $adBanner = \Illuminate\Support\Facades\Cache::remember('ad_banner_iklan_active', $ttl, function() {
+        $adBanner = Cache::remember('ad_banner_iklan_active', $ttl, function () {
             return Banner::where('is_active', true)->where('type', 'iklan')->latest()->first();
         });
 
-        $approvedReviews = \Illuminate\Support\Facades\Cache::remember('approved_reviews', $ttl, function() {
+        $approvedReviews = Cache::remember('approved_reviews', $ttl, function () {
             return Review::where('is_approved', true)->latest()->get();
         });
-        
-        $about = \Illuminate\Support\Facades\Cache::remember('about_data', $ttl, function() {
+
+        $about = Cache::remember('about_data', $ttl, function () {
             return About::first() ?? new About([
                 'title' => 'Membawa Kesegaran',
                 'subtitle' => 'Alam ke Ruangan Anda',
@@ -49,13 +45,13 @@ class CatalogController extends Controller
                 'description_2' => 'Setiap koleksi kami dirangkai dengan tangan-tangan ahli menggunakan bunga segar pilihan.',
                 'experience_years' => '10+',
                 'clients_count' => '5K+',
-                'fresh_flowers_pct' => '100%'
+                'fresh_flowers_pct' => '100%',
             ]);
         });
 
-        $homeCategories = \Illuminate\Support\Facades\Cache::remember('home_categories', $ttl, function() {
+        $homeCategories = Cache::remember('home_categories', $ttl, function () {
             return Category::where('is_active_on_home', true)
-                ->with(['products' => function($query) {
+                ->with(['products' => function ($query) {
                     $query->latest()->take(4);
                 }])
                 ->get();
@@ -76,9 +72,9 @@ class CatalogController extends Controller
 
         if ($request->has('q') && $request->q != '') {
             $search = $request->q;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('description', 'like', "%{$search}%");
+                    ->orWhere('description', 'like', "%{$search}%");
             });
         }
 

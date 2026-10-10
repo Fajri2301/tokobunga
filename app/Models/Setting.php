@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Setting extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'site_name',
         'meta_title',
@@ -23,6 +23,6 @@ class Setting extends Model
         'google_maps_link',
         'instagram_url',
         'facebook_url',
-        'footer_text'
+        'footer_text',
     ];
 }

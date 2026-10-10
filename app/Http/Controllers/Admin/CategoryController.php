@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
 use App\Http\Requests\Admin\StoreCategoryRequest;
 use App\Http\Requests\Admin\UpdateCategoryRequest;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use App\Models\Category;
+use App\Support\StorefrontCache;
 use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
@@ -15,6 +14,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::latest()->paginate(10);
+
         return view('admin.categories.index', compact('categories'));
     }
 
@@ -35,6 +35,7 @@ class CategoryController extends Controller
             'image' => $imagePath,
             'is_active_on_home' => $request->has('is_active_on_home'),
         ]);
+        StorefrontCache::forget();
 
         return redirect()->route('admin.categories.index')->with('success', 'Kategori berhasil ditambahkan.');
     }
@@ -59,6 +60,7 @@ class CategoryController extends Controller
             'image' => $imagePath,
             'is_active_on_home' => $request->has('is_active_on_home'),
         ]);
+        StorefrontCache::forget();
 
         return redirect()->route('admin.categories.index')->with('success', 'Kategori berhasil diperbarui.');
     }
@@ -69,6 +71,8 @@ class CategoryController extends Controller
             Storage::disk('public')->delete($category->image);
         }
         $category->delete();
+        StorefrontCache::forget();
+
         return redirect()->route('admin.categories.index')->with('success', 'Kategori berhasil dihapus.');
     }
 }

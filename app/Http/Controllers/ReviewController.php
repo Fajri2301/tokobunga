@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Review;
 use App\Http\Requests\StoreReviewRequest;
+use App\Models\Review;
+use App\Support\StorefrontCache;
 
 class ReviewController extends Controller
 {
@@ -15,6 +16,7 @@ class ReviewController extends Controller
             'comment' => strip_tags($request->comment),
             'is_approved' => false,
         ]);
+        StorefrontCache::forget();
 
         return back()->with('success_review', 'Terima kasih! Ulasan Anda telah terkirim dan akan tampil setelah disetujui admin.');
     }

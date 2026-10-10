@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\AIChatServiceInterface;
+use App\Events\MessageSent;
 use App\Models\Message;
 use App\Models\Product;
-use App\Events\MessageSent;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use App\Contracts\AIChatServiceInterface;
+use Illuminate\Support\Facades\Storage;
 
 class ChatController extends Controller
 {
@@ -23,20 +25,21 @@ class ChatController extends Controller
      */
     public function index()
     {
-        $sessions = Message::select('session_id')
+        $sessions = Message::query()
+            ->select('session_id')
+            ->selectRaw('MAX(id) as last_message_id')
+            ->selectRaw("SUM(CASE WHEN sender_type = 'customer' AND is_read = 0 THEN 1 ELSE 0 END) as unread_count")
             ->groupBy('session_id')
-            ->orderBy('created_at', 'desc')
+            ->orderByDesc('last_message_id')
             ->get();
 
-        foreach ($sessions as $session) {
-            $session->last_message = Message::where('session_id', $session->session_id)
-                ->orderBy('created_at', 'desc')
-                ->first();
-            $session->unread_count = Message::where('session_id', $session->session_id)
-                ->where('sender_type', 'customer')
-                ->where('is_read', false)
-                ->count();
-        }
+        $lastMessages = Message::whereIn('id', $sessions->pluck('last_message_id'))
+            ->get()
+            ->keyBy('id');
+
+        $sessions->each(function (Message $session) use ($lastMessages): void {
+            $session->last_message = $lastMessages->get($session->last_message_id);
+        });
 
         return view('admin.chat.index', compact('sessions'));
     }
@@ -61,9 +64,10 @@ class ChatController extends Controller
     public function getMessages(Request $request)
     {
         $sessionId = $request->session()->getId();
+
         return Message::where('session_id', $sessionId)
-                      ->orderBy('created_at', 'asc')
-                      ->get();
+            ->orderBy('created_at', 'asc')
+            ->get();
     }
 
     /**
@@ -71,19 +75,19 @@ class ChatController extends Controller
      */
     public function sendMessage(Request $request)
     {
-        $request->validate(['message' => 'required|string|max:1000']);
+        $request->validate(['message' => ['required', 'string', 'max:1000']]);
         $sessionId = $request->session()->getId();
 
         // 1. Save Customer Message
         $message = Message::create([
             'session_id' => $sessionId,
             'sender_type' => 'customer',
-            'message' => $request->message
+            'message' => $request->string('message')->trim()->value(),
         ]);
         try {
             broadcast(new MessageSent($message))->toOthers();
         } catch (\Throwable $e) {
-            Log::error('Broadcast failed: ' . $e->getMessage());
+            Log::error('Broadcast failed: '.$e->getMessage());
         }
 
         // 2. Prepare Context & History for AI
@@ -93,17 +97,17 @@ class ChatController extends Controller
             ->limit(10)
             ->get()
             ->reverse()
-            ->map(fn($m) => ['role' => $m->sender_type, 'content' => $m->message])
+            ->map(fn ($m) => ['role' => $m->sender_type, 'content' => $m->message])
             ->toArray();
 
         $products = Product::limit(15)->get(['name', 'price']);
-        $settings = \App\Models\Setting::first();
+        $settings = Setting::first();
         $context = [
             'products' => $products,
             'store_info' => $settings ? [
                 'nama_toko' => $settings->site_name, 'alamat' => $settings->address,
                 'whatsapp' => $settings->whatsapp_number, 'email' => $settings->email,
-            ] : []
+            ] : [],
         ];
 
         // 3. Get AI Response (can be string or array)
@@ -111,26 +115,26 @@ class ChatController extends Controller
 
         // 4. Process AI Response
         if ($aiResponse) {
-            $botMessage = "Maaf, saya tidak mengerti."; // Default text
+            $botMessage = 'Maaf, saya tidak mengerti.'; // Default text
             $metadata = null;
 
             if (is_array($aiResponse) && isset($aiResponse['action'])) {
                 // Handle JSON command
                 if ($aiResponse['action'] === 'show_image' && isset($aiResponse['product_name'])) {
                     $productName = $aiResponse['product_name'];
-                    $product = Product::where('name', 'like', '%' . $productName . '%')->first();
+                    $product = Product::where('name', 'like', '%'.$productName.'%')->first();
 
                     if ($product) {
-                        $botMessage = "Tentu, ini dia gambar untuk " . $product->name . ":";
-                        
+                        $botMessage = 'Tentu, ini dia gambar untuk '.$product->name.':';
+
                         // Check if image is an absolute URL or a local path
-                        $imageUrl = str_starts_with($product->image, 'http')
+                        $imageUrl = str_starts_with((string) $product->image, 'http')
                             ? $product->image
-                            : \Illuminate\Support\Facades\Storage::url($product->image);
-                        
+                            : Storage::url($product->image);
+
                         $metadata = ['image_url' => $imageUrl];
                     } else {
-                        $botMessage = "Maaf, saya tidak dapat menemukan produk dengan nama '" . $productName . "'.";
+                        $botMessage = "Maaf, saya tidak dapat menemukan produk dengan nama '".$productName."'.";
                     }
                 }
             } elseif (is_string($aiResponse)) {
@@ -144,11 +148,11 @@ class ChatController extends Controller
                 'message' => $botMessage,
                 'metadata' => $metadata,
             ]);
-            
+
             try {
                 broadcast(new MessageSent($botMsg));
             } catch (\Throwable $e) {
-                Log::error('Broadcast failed: ' . $e->getMessage());
+                Log::error('Broadcast failed: '.$e->getMessage());
             }
         }
 
@@ -162,19 +166,19 @@ class ChatController extends Controller
     {
         $request->validate([
             'session_id' => 'required|string',
-            'message' => 'required|string'
+            'message' => ['required', 'string', 'max:1000'],
         ]);
 
         $message = Message::create([
             'session_id' => $request->session_id,
             'sender_type' => 'admin',
-            'message' => $request->message
+            'message' => $request->string('message')->trim()->value(),
         ]);
 
         try {
             broadcast(new MessageSent($message));
         } catch (\Throwable $e) {
-            Log::error('Broadcast failed: ' . $e->getMessage());
+            Log::error('Broadcast failed: '.$e->getMessage());
         }
 
         return response()->json(['status' => 'success']);

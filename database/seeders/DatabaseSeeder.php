@@ -4,7 +4,9 @@ namespace Database\Seeders;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
@@ -12,10 +14,11 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Create Admin User
-        \App\Models\User::create([
+        User::create([
             'name' => 'Administrator',
             'email' => 'admin@flora.com',
-            'password' => \Illuminate\Support\Facades\Hash::make('admin123'),
+            'password' => Hash::make('admin123'),
+            'is_admin' => true,
         ]);
 
         $categories = [
@@ -29,18 +32,18 @@ class DatabaseSeeder extends Seeder
             $category = Category::create([
                 'name' => $cat['name'],
                 'slug' => Str::slug($cat['name']),
-                'image' => $cat['image']
+                'image' => $cat['image'],
             ]);
 
             for ($i = 1; $i <= 5; $i++) {
                 Product::create([
                     'category_id' => $category->id,
-                    'name' => $cat['name'] . ' ' . $i,
-                    'slug' => Str::slug($cat['name'] . ' ' . $i),
-                    'description' => 'Ini adalah deskripsi untuk ' . $cat['name'] . ' ' . $i . '. Bunga segar pilihan yang dirangkai dengan penuh cinta untuk momen spesial Anda.',
+                    'name' => $cat['name'].' '.$i,
+                    'slug' => Str::slug($cat['name'].' '.$i),
+                    'description' => 'Ini adalah deskripsi untuk '.$cat['name'].' '.$i.'. Bunga segar pilihan yang dirangkai dengan penuh cinta untuk momen spesial Anda.',
                     'price' => rand(150000, 1500000),
                     'image' => $cat['image'], // Reusing category image for simplicity in demo
-                    'is_featured' => $i <= 2
+                    'is_featured' => $i <= 2,
                 ]);
             }
         }
