@@ -13,6 +13,7 @@ class SettingsVisibilityTest extends TestCase
     public function test_public_contact_page_uses_the_current_database_address(): void
     {
         Setting::query()->create([
+            'id' => 1,
             'site_name' => 'Flora Test',
             'address' => 'Jl. Mawar No. 42, Jakarta',
         ]);
