@@ -74,5 +74,22 @@ jobs:
           **/tests/**
           **/storage/**
           .github/**
+          .env
           .env.example
           phpunit.xml
+
+    - name: 🔧 Post-deploy artisan commands via SSH
+      uses: appleboy/ssh-action@v1.2.0
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        password: ${{ secrets.SSH_PASSWORD }}
+        port: ${{ secrets.SSH_PORT }}
+        script: |
+          cd /zankidausat
+          php8.3 artisan config:clear
+          php8.3 artisan cache:clear
+          php8.3 artisan view:clear
+          php8.3 artisan route:clear
+          php8.3 artisan migrate --force
+          php8.3 artisan storage:link
