@@ -2,6 +2,7 @@
 
 use App\Models\About;
 use App\Models\Review;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 // Public Routes
@@ -66,6 +67,12 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     // Settings
     Route::get('settings', 'App\Http\Controllers\Admin\SettingController@edit')->name('settings.edit');
     Route::put('settings', 'App\Http\Controllers\Admin\SettingController@update')->name('settings.update');
+    Route::post('system/optimize', function () {
+        Artisan::call('migrate', ['--force' => true]);
+        Artisan::call('optimize:clear');
+
+        return back()->with('success', 'Migrasi database dan pembersihan cache berhasil dijalankan!');
+    })->name('system.optimize');
     Route::get('about', 'App\Http\Controllers\Admin\AboutController@edit')->name('about.edit');
     Route::put('about', 'App\Http\Controllers\Admin\AboutController@update')->name('about.update');
 

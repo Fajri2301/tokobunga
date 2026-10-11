@@ -153,5 +153,19 @@
             </div>
         </form>
     </div>
+
+    <!-- System Maintenance Helper -->
+    <div class="mt-8 bg-slate-50 rounded-[2rem] p-6 border border-slate-200/60 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div>
+            <h4 class="font-bold text-slate-800 text-sm">Sinkronisasi Database & Bersihkan Cache</h4>
+            <p class="text-xs text-slate-500 mt-1">Jalankan migrasi database terbaru dan bersihkan cache sistem (solusi praktis jika tidak memiliki akses SSH di hosting).</p>
+        </div>
+        <form action="{{ route('admin.system.optimize') }}" method="POST" onsubmit="return confirm('Jalankan migrasi database dan bersihkan cache sistem sekarang?')">
+            @csrf
+            <button type="submit" class="px-6 py-3 bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold rounded-xl transition-all shadow-sm shrink-0">
+                🔄 Sync & Clear Cache
+            </button>
+        </form>
+    </div>
 </div>
 @endsection
