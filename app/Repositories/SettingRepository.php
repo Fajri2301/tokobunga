@@ -9,13 +9,9 @@ class SettingRepository implements SettingRepositoryInterface
 {
     public function getGlobalSettings()
     {
-        return Setting::firstOrCreate(['id' => 1], [
-            'site_name' => 'Zanki Dausat Flower',
-            'footer_text' => 'Menghadirkan keindahan alam langsung ke depan pintu Anda.',
-            'meta_title' => 'Zanki Dausat Flower - Premium Florist',
-            'meta_description' => 'Toko bunga terpercaya dengan rangkaian bunga segar pilihan.',
-            'whatsapp_number' => '628123456789',
-        ]);
+        // Row settings dijamin ada oleh DatabaseSeeder.
+        // Jika tidak ada (misal fresh install tanpa seeder), kembalikan instance kosong agar tidak crash.
+        return Setting::firstOrNew(['id' => 1]);
     }
 
     public function clearCache(): void

@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -14,12 +15,30 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Create Admin User
-        User::create([
-            'name' => 'Administrator',
-            'email' => 'admin@flora.com',
-            'password' => Hash::make('admin123'),
-            'is_admin' => true,
-        ]);
+        User::updateOrCreate(
+            ['email' => 'admin@flora.com'],
+            [
+                'name'     => 'Administrator',
+                'password' => Hash::make('admin123'),
+                'is_admin' => true,
+            ]
+        );
+
+        // Seed default site settings — bisa diubah lewat panel admin setelah deploy.
+        // updateOrCreate memastikan data ini tidak ditimpa ulang jika seeder dijalankan dua kali.
+        Setting::updateOrCreate(
+            ['id' => 1],
+            [
+                'site_name'       => 'Zanki Dausat Flower',
+                'meta_title'      => 'Zanki Dausat Flower - Premium Florist',
+                'meta_description'=> 'Toko bunga terpercaya dengan rangkaian bunga segar pilihan.',
+                'phone_number'    => '0812-3456-7890',
+                'whatsapp_number' => '628123456789',
+                'email'           => 'hello@zankidausat.com',
+                'address'         => 'Jl. Bunga Melati No. 123, Jakarta',
+                'footer_text'     => 'Menghadirkan keindahan alam langsung ke depan pintu Anda.',
+            ]
+        );
 
         $categories = [
             ['name' => 'Bunga Papan', 'image' => 'https://images.unsplash.com/photo-1596073413908-4402caddecff?q=80&w=400'],
