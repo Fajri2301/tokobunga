@@ -9,9 +9,19 @@ class SettingRepository implements SettingRepositoryInterface
 {
     public function getGlobalSettings()
     {
-        // Row settings dijamin ada oleh DatabaseSeeder.
-        // Jika tidak ada (misal fresh install tanpa seeder), kembalikan instance kosong agar tidak crash.
-        return Setting::firstOrNew(['id' => 1]);
+        // Settings adalah single row (singleton) untuk seluruh website.
+        // Ambil baris setting pertama yang ada, atau buat baru dengan default jika tabel masih kosong.
+        return Setting::first() ?? Setting::create([
+            'id' => 1,
+            'site_name' => 'Zanki Dausat Flower',
+            'meta_title' => 'Zanki Dausat Flower - Premium Florist',
+            'meta_description' => 'Toko bunga terpercaya dengan rangkaian bunga segar pilihan.',
+            'phone_number' => '0812-3456-7890',
+            'whatsapp_number' => '628123456789',
+            'email' => 'hello@zankidausat.com',
+            'address' => 'Jl. Bunga Melati No. 123, Jakarta',
+            'footer_text' => 'Menghadirkan keindahan alam langsung ke depan pintu Anda.',
+        ]);
     }
 
     public function clearCache(): void

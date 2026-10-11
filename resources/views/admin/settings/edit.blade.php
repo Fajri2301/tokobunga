@@ -132,12 +132,16 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Instagram URL</label>
-                            <input type="url" name="instagram_url" value="{{ old('instagram_url', $setting->instagram_url) }}" class="w-full px-5 py-4 rounded-2xl bg-slate-50 border border-slate-200 outline-none transition-all">
+                            <input type="text" name="instagram_url" value="{{ old('instagram_url', $setting->instagram_url) }}" placeholder="https://instagram.com/..." class="w-full px-5 py-4 rounded-2xl bg-slate-50 border border-slate-200 outline-none transition-all">
                         </div>
                         <div>
-                            <label class="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Teks Footer</label>
-                            <input type="text" name="footer_text" value="{{ old('footer_text', $setting->footer_text) }}" class="w-full px-5 py-4 rounded-2xl bg-slate-50 border border-slate-200 outline-none transition-all font-bold">
+                            <label class="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Facebook URL</label>
+                            <input type="text" name="facebook_url" value="{{ old('facebook_url', $setting->facebook_url) }}" placeholder="https://facebook.com/..." class="w-full px-5 py-4 rounded-2xl bg-slate-50 border border-slate-200 outline-none transition-all">
                         </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Teks Footer</label>
+                        <input type="text" name="footer_text" value="{{ old('footer_text', $setting->footer_text) }}" class="w-full px-5 py-4 rounded-2xl bg-slate-50 border border-slate-200 outline-none transition-all font-bold">
                     </div>
                 </div>
             </div>

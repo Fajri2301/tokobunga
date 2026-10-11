@@ -29,14 +29,14 @@ class DatabaseSeeder extends Seeder
         Setting::updateOrCreate(
             ['id' => 1],
             [
-                'site_name'       => 'Zanki Dausat Flower',
-                'meta_title'      => 'Zanki Dausat Flower - Premium Florist',
-                'meta_description'=> 'Toko bunga terpercaya dengan rangkaian bunga segar pilihan.',
-                'phone_number'    => '0812-3456-7890',
+                'site_name' => 'Zanki Dausat Flower',
+                'meta_title' => 'Zanki Dausat Flower - Premium Florist',
+                'meta_description' => 'Toko bunga terpercaya dengan rangkaian bunga segar pilihan.',
+                'phone_number' => '0812-3456-7890',
                 'whatsapp_number' => '628123456789',
-                'email'           => 'hello@zankidausat.com',
-                'address'         => 'Jl. Bunga Melati No. 123, Jakarta',
-                'footer_text'     => 'Menghadirkan keindahan alam langsung ke depan pintu Anda.',
+                'email' => 'hello@zankidausat.com',
+                'address' => 'Jl. Bunga Melati No. 123, Jakarta',
+                'footer_text' => 'Menghadirkan keindahan alam langsung ke depan pintu Anda.',
             ]
         );
 
