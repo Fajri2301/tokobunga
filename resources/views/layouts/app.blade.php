@@ -277,58 +277,110 @@
             </div>
         </div>
     </footer>
-<!-- Floating Chat Widget -->
-<div id="chat-widget" class="fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-[90]">
-    <!-- Chat Button -->
-    <button onclick="toggleChat()" aria-label="Buka chat" class="w-14 h-14 bg-[#0cc0df] text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-all border-4 border-white">
+<!-- Floating Chat Widget Trigger -->
+<div id="chat-trigger-container" class="fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-[80]">
+    <button id="chat-trigger-btn" onclick="toggleChat()" aria-label="Buka obrolan bantuan" class="w-14 h-14 bg-[#0cc0df] text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all border-4 border-white cursor-pointer">
         <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
     </button>
+</div>
 
-    <!-- Chat Window -->
-    <div id="chat-window" class="fixed bottom-[84px] right-4 left-4 sm:left-auto sm:right-0 sm:w-[350px] max-h-[min(75vh,560px)] bg-white rounded-3xl shadow-2xl border border-slate-100 hidden flex-col overflow-hidden animate-fade-in-up">
-        <!-- Header -->
-        <div class="bg-[#0D2137] p-5 text-white flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
-                    <svg class="w-6 h-6 text-[#F4F8F4]" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path></svg>
-                </div>
-                <div>
-                    <h4 class="font-bold text-sm">{{ $global_setting->site_name ?? 'Zanki Dausat Flower' }} Bot</h4>
-                    <p class="text-[10px] opacity-70">Online • Siap membantu</p>
-                </div>
+<!-- Chat Window Modal / Box (Simetris di Mobile & Floating di Desktop) -->
+<div id="chat-window" class="fixed inset-x-3 bottom-3 top-16 max-w-[420px] mx-auto sm:top-auto sm:inset-x-auto sm:bottom-24 sm:right-6 sm:w-[380px] sm:h-[550px] sm:max-h-[calc(100vh-120px)] bg-white rounded-3xl shadow-2xl border border-slate-200/90 hidden flex-col overflow-hidden z-[100] transition-all">
+    <!-- Header -->
+    <div class="bg-[#0D2137] px-4 py-3.5 sm:px-5 sm:py-4 text-white flex items-center justify-between shrink-0 shadow-sm">
+        <div class="flex items-center gap-3">
+            <div class="w-9 h-9 sm:w-10 sm:h-10 bg-white/15 rounded-full flex items-center justify-center shrink-0">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-[#F4F8F4]" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path></svg>
             </div>
-            <button onclick="toggleChat()" class="text-white/50 hover:text-white"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
-        </div>
-
-        <!-- Messages Area -->
-        <div id="chat-messages" class="flex-1 min-h-[250px] overflow-y-auto p-4 space-y-4 bg-slate-50">
-            <!-- Messages will appear here -->
-            <div class="bg-blue-50 p-3 rounded-2xl rounded-tl-none text-xs text-slate-700 max-w-[80%] border border-blue-100">
-                Halo! Ada yang bisa {{ $global_setting->site_name ?? 'Zanki Dausat Flower' }} bantu hari ini? 🌸
+            <div>
+                <h4 class="font-bold text-xs sm:text-sm leading-tight text-white">{{ $global_setting->site_name ?? 'Zanki Dausat Flower' }} Bot</h4>
+                <p class="text-[10px] text-emerald-400 font-medium flex items-center gap-1 mt-0.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-pulse"></span> Online • Siap membantu
+                </p>
             </div>
         </div>
-
-        <!-- Input Area -->
-        <form id="chat-form" onsubmit="sendChatMessage(event)" class="p-3.5 bg-white border-t border-slate-100 flex items-center gap-2">
-            <input type="text" id="chat-input" placeholder="Tulis pesan..." autocomplete="off" class="flex-1 bg-slate-100 text-slate-800 placeholder-slate-400 font-medium border border-slate-200 rounded-full px-4 py-2.5 text-xs outline-none focus:bg-white focus:border-[#0cc0df] focus:ring-2 focus:ring-[#0cc0df]/20 transition-all">
-            <button type="submit" class="w-9 h-9 bg-[#0cc0df] text-white rounded-full flex items-center justify-center shadow-md active:scale-95 transition-all hover:bg-[#09a8c4] shrink-0">
-                <svg class="w-4 h-4 rotate-90" fill="currentColor" viewBox="0 0 20 20"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
-            </button>
-        </form>
+        <button onclick="toggleChat()" aria-label="Tutup obrolan" class="p-1.5 text-white/70 hover:text-white rounded-full hover:bg-white/10 active:scale-95 transition-all cursor-pointer">
+            <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
     </div>
+
+    <!-- Messages Area (min-h-0 penting agar form input tidak terdorong keluar) -->
+    <div id="chat-messages" class="flex-1 min-h-0 overflow-y-auto p-4 space-y-4 bg-slate-50 overscroll-contain">
+        <!-- Messages will appear here -->
+        <div class="bg-blue-50 p-3 rounded-2xl rounded-tl-none text-xs text-slate-700 max-w-[85%] border border-blue-100 shadow-xs">
+            Halo! Ada yang bisa {{ $global_setting->site_name ?? 'Zanki Dausat Flower' }} bantu hari ini? 🌸
+        </div>
+    </div>
+
+    <!-- Input Area (shrink-0 memastikan baris ketik tidak pernah tertekan/terpotong) -->
+    <form id="chat-form" onsubmit="sendChatMessage(event)" class="p-3 sm:p-3.5 bg-white border-t border-slate-100 flex items-center gap-2 shrink-0">
+        <input type="text" id="chat-input" placeholder="Tulis pesan..." autocomplete="off" class="flex-1 bg-slate-100 text-slate-800 placeholder-slate-400 font-medium border border-slate-200 rounded-full px-4 py-2.5 text-xs sm:text-sm outline-none focus:bg-white focus:border-[#0cc0df] focus:ring-2 focus:ring-[#0cc0df]/20 transition-all">
+        <button type="submit" aria-label="Kirim pesan" class="w-10 h-10 bg-[#0cc0df] text-white rounded-full flex items-center justify-center shadow-md active:scale-95 transition-all hover:bg-[#09a8c4] shrink-0 cursor-pointer">
+            <svg class="w-4 h-4 rotate-90" fill="currentColor" viewBox="0 0 20 20"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
+        </button>
+    </form>
 </div>
 
     <script>
         // Chat Toggle
         function toggleChat() {
             const chatBox = document.getElementById('chat-window');
+            const triggerBtn = document.getElementById('chat-trigger-btn');
+            if (!chatBox) return;
+
             const willHide = chatBox.classList.contains('flex');
-            chatBox.classList.toggle('flex', willHide ? false : true);
-            chatBox.classList.toggle('hidden', willHide ? true : false);
-            if (!willHide) {
-                loadChatHistory();
-                document.getElementById('chat-input').focus();
+            chatBox.classList.toggle('flex', !willHide);
+            chatBox.classList.toggle('hidden', willHide);
+
+            // Sembunyikan tombol floating bulat di HP saat chat terbuka agar tidak menumpuk/menutupi input
+            if (triggerBtn) {
+                if (!willHide) {
+                    triggerBtn.classList.add('hidden');
+                    triggerBtn.classList.add('sm:flex');
+                } else {
+                    triggerBtn.classList.remove('hidden');
+                }
             }
+
+            if (!willHide) {
+                syncChatPosition();
+                loadChatHistory();
+                // Hanya auto-focus di desktop agar keyboard mobile tidak tiba-tiba menutupi chat
+                if (window.innerWidth >= 640) {
+                    document.getElementById('chat-input')?.focus();
+                }
+            } else {
+                chatBox.style.bottom = '';
+                chatBox.style.top = '';
+            }
+        }
+
+        // Sinkronisasi posisi chat dengan Virtual Keyboard mobile (VisualViewport API)
+        function syncChatPosition() {
+            const chatBox = document.getElementById('chat-window');
+            if (!chatBox || chatBox.classList.contains('hidden')) return;
+
+            if (window.innerWidth < 640 && window.visualViewport) {
+                const viewport = window.visualViewport;
+                const keyboardHeight = Math.max(0, window.innerHeight - viewport.height - viewport.offsetTop);
+                if (keyboardHeight > 0) {
+                    // Keyboard aktif: angkat kotak chat tepat di atas keyboard
+                    chatBox.style.bottom = `${keyboardHeight + 8}px`;
+                    chatBox.style.top = '12px';
+                } else {
+                    chatBox.style.bottom = '';
+                    chatBox.style.top = '';
+                }
+                scrollToBottom();
+            } else if (chatBox) {
+                chatBox.style.bottom = '';
+                chatBox.style.top = '';
+            }
+        }
+
+        if (window.visualViewport) {
+            window.visualViewport.addEventListener('resize', syncChatPosition);
+            window.visualViewport.addEventListener('scroll', syncChatPosition);
         }
 
         // Load History
@@ -424,6 +476,20 @@
 
         // Initialize App Scripts
         document.addEventListener('DOMContentLoaded', () => {
+            // Pasang event listener keyboard untuk chat input
+            const chatInput = document.getElementById('chat-input');
+            if (chatInput) {
+                chatInput.addEventListener('focus', () => {
+                    setTimeout(() => {
+                        syncChatPosition();
+                        scrollToBottom();
+                    }, 250);
+                });
+                chatInput.addEventListener('blur', () => {
+                    setTimeout(syncChatPosition, 150);
+                });
+            }
+
             window.setInterval(() => {
                 const chatWindow = document.getElementById('chat-window');
                 if (chatWindow && !chatWindow.classList.contains('hidden')) {
@@ -443,12 +509,17 @@
                 }
             });
 
-            // Tutup search modal / sidebar dengan tombol Escape
+            // Tutup search modal / chat / sidebar dengan tombol Escape
             document.addEventListener('keydown', function(e) {
                 if (e.key !== 'Escape') return;
                 const modal = document.getElementById('search-modal');
                 if (modal && !modal.classList.contains('hidden')) {
                     closeSearch();
+                    return;
+                }
+                const chatWindow = document.getElementById('chat-window');
+                if (chatWindow && !chatWindow.classList.contains('hidden')) {
+                    toggleChat();
                     return;
                 }
                 const sidebar = document.getElementById('sidebar');
