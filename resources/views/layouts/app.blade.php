@@ -293,7 +293,7 @@
                     <svg class="w-6 h-6 text-[#F4F8F4]" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path></svg>
                 </div>
                 <div>
-                    <h4 class="font-bold text-sm">Zanki Dausat Flower Bot</h4>
+                    <h4 class="font-bold text-sm">{{ $global_setting->site_name ?? 'Zanki Dausat Flower' }} Bot</h4>
                     <p class="text-[10px] opacity-70">Online • Siap membantu</p>
                 </div>
             </div>
@@ -304,14 +304,14 @@
         <div id="chat-messages" class="flex-1 min-h-[250px] overflow-y-auto p-4 space-y-4 bg-slate-50">
             <!-- Messages will appear here -->
             <div class="bg-blue-50 p-3 rounded-2xl rounded-tl-none text-xs text-slate-700 max-w-[80%] border border-blue-100">
-                Halo! Ada yang bisa Zanki Dausat Flower bantu hari ini? 🌸
+                Halo! Ada yang bisa {{ $global_setting->site_name ?? 'Zanki Dausat Flower' }} bantu hari ini? 🌸
             </div>
         </div>
 
         <!-- Input Area -->
-        <form id="chat-form" onsubmit="sendChatMessage(event)" class="p-4 bg-white border-t border-slate-100 flex items-center gap-2">
-            <input type="text" id="chat-input" placeholder="Tulis pesan..." class="flex-1 bg-slate-50 border-none rounded-full px-4 py-2 text-xs outline-none focus:ring-2 focus:ring-[#0cc0df]/30 transition-all">
-            <button type="submit" class="w-9 h-9 bg-[#0cc0df] text-white rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-all hover:bg-[#09a8c4]">
+        <form id="chat-form" onsubmit="sendChatMessage(event)" class="p-3.5 bg-white border-t border-slate-100 flex items-center gap-2">
+            <input type="text" id="chat-input" placeholder="Tulis pesan..." autocomplete="off" class="flex-1 bg-slate-100 text-slate-800 placeholder-slate-400 font-medium border border-slate-200 rounded-full px-4 py-2.5 text-xs outline-none focus:bg-white focus:border-[#0cc0df] focus:ring-2 focus:ring-[#0cc0df]/20 transition-all">
+            <button type="submit" class="w-9 h-9 bg-[#0cc0df] text-white rounded-full flex items-center justify-center shadow-md active:scale-95 transition-all hover:bg-[#09a8c4] shrink-0">
                 <svg class="w-4 h-4 rotate-90" fill="currentColor" viewBox="0 0 20 20"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
             </button>
         </form>

@@ -63,7 +63,7 @@
 
             <!-- Input Area -->
             <form onsubmit="sendAdminMessage(event)" class="p-4 md:p-6 bg-white border-t border-slate-50 flex items-center gap-3">
-                <input type="text" id="message-input" placeholder="Tulis balasan..." class="flex-1 bg-slate-50 border-none rounded-2xl px-6 py-3 text-sm outline-none focus:ring-2 focus:ring-blue-500/10 transition-all shadow-inner">
+                <input type="text" id="message-input" placeholder="Tulis balasan..." autocomplete="off" class="flex-1 bg-slate-50 text-slate-800 placeholder-slate-400 font-medium border border-slate-200/80 rounded-2xl px-6 py-3 text-sm outline-none focus:bg-white focus:ring-2 focus:ring-blue-500/20 transition-all shadow-inner">
                 <button type="submit" class="w-12 h-12 bg-blue-600 text-white rounded-2xl flex items-center justify-center shadow-lg hover:bg-blue-700 active:scale-95 transition-all shrink-0">
                     <svg class="w-5 h-5 rotate-90" fill="currentColor" viewBox="0 0 20 20"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
                 </button>
