@@ -50,11 +50,11 @@ class SettingController extends Controller
             $setting = Setting::first() ?? new Setting(['id' => 1]);
 
             // Auto-prefix https:// jika user mengetik domain tanpa protokol
-            if (!empty($data['instagram_url']) && !str_starts_with($data['instagram_url'], 'http://') && !str_starts_with($data['instagram_url'], 'https://')) {
-                $data['instagram_url'] = 'https://' . $data['instagram_url'];
+            if (! empty($data['instagram_url']) && ! str_starts_with($data['instagram_url'], 'http://') && ! str_starts_with($data['instagram_url'], 'https://')) {
+                $data['instagram_url'] = 'https://'.$data['instagram_url'];
             }
-            if (!empty($data['facebook_url']) && !str_starts_with($data['facebook_url'], 'http://') && !str_starts_with($data['facebook_url'], 'https://')) {
-                $data['facebook_url'] = 'https://' . $data['facebook_url'];
+            if (! empty($data['facebook_url']) && ! str_starts_with($data['facebook_url'], 'http://') && ! str_starts_with($data['facebook_url'], 'https://')) {
+                $data['facebook_url'] = 'https://'.$data['facebook_url'];
             }
 
             // Handle Logo

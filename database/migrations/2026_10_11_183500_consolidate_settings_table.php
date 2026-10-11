@@ -36,21 +36,6 @@ return new class extends Migration
                 DB::table('settings')->where('id', 1)->delete();
                 DB::table('settings')->where('id', $best->id)->update(['id' => 1]);
             }
-        } else {
-            // Jika tabel kosong sama sekali, buat 1 record default
-            DB::table('settings')->insert([
-                'id' => 1,
-                'site_name' => 'Zanki Dausat Flower',
-                'meta_title' => 'Zanki Dausat Flower - Premium Florist',
-                'meta_description' => 'Toko bunga terpercaya dengan rangkaian bunga segar pilihan.',
-                'phone_number' => '0812-3456-7890',
-                'whatsapp_number' => '628123456789',
-                'email' => 'hello@zankidausat.com',
-                'address' => 'Jl. Bunga Melati No. 123, Jakarta',
-                'footer_text' => 'Menghadirkan keindahan alam langsung ke depan pintu Anda.',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
         }
     }
 
